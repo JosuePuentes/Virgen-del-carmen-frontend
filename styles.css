@@ -169,25 +169,35 @@ ul {
   color: var(--gold);
 }
 
-/* Hero */
+/* Hero: foto de fondo (profesional + estantes borrosos) */
 .hero {
   position: relative;
   min-height: 420px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--dark-soft) 0%, var(--dark) 100%);
-  background-image: 
-    linear-gradient(to bottom, rgba(44, 36, 22, 0.85), rgba(44, 36, 22, 0.75)),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400"><rect fill="%233d3426" width="800" height="400"/><g fill="%23b8860b" opacity="0.08"><circle cx="100" cy="80" r="60"/><circle cx="700" cy="320" r="80"/><rect x="300" y="150" width="200" height="100" rx="8"/></g></svg>');
+  background: var(--dark);
+  overflow: hidden;
+}
+
+/* Capa de la foto con desenfoque */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  background-image: url('https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=1200&q=80');
   background-size: cover;
   background-position: center;
+  filter: blur(5px);
+  transform: scale(1.05);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 0%, rgba(44, 36, 22, 0.4) 100%);
+  z-index: 1;
+  background: linear-gradient(to right, rgba(44, 36, 22, 0.88) 30%, rgba(44, 36, 22, 0.5) 100%);
   pointer-events: none;
 }
 
