@@ -177,7 +177,7 @@ ul {
   color: var(--gold);
 }
 
-/* Hero: foto de fondo (profesional + estantes borrosos) */
+/* Hero */
 .hero {
   position: relative;
   min-height: 420px;
@@ -188,7 +188,6 @@ ul {
   overflow: hidden;
 }
 
-/* Capa de la foto con desenfoque */
 .hero::before {
   content: '';
   position: absolute;
@@ -243,7 +242,7 @@ ul {
   background: var(--gold);
 }
 
-/* Secciones comunes */
+/* Secciones */
 .section-title {
   font-family: var(--font-serif);
   font-size: clamp(1.35rem, 2.5vw, 1.65rem);
@@ -320,7 +319,7 @@ ul {
   font-size: 1.1rem;
 }
 
-/* Marcas que distribuimos */
+/* Distribuye */
 .distribuye-section {
   padding: 3rem 0;
   background: var(--dark);
@@ -361,16 +360,6 @@ ul {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
   padding-bottom: 2rem;
-}
-
-@media (max-width: 768px) {
-  .footer-grid {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  .footer-center {
-    order: -1;
-  }
 }
 
 .footer h3 {
@@ -448,8 +437,12 @@ ul {
   font-family: inherit;
   font-size: 1rem;
 }
-.btn-footer:hover {
+.btn-footer:hover:not(:disabled) {
   background: var(--gold);
+}
+.btn-footer:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .footer-bottom {
@@ -476,6 +469,13 @@ ul {
   }
   .top-bar-inner {
     justify-content: center;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .footer-center {
+    order: -1;
   }
   .categories-grid {
     grid-template-columns: repeat(2, 1fr);

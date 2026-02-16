@@ -12,5 +12,12 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Dependencies (si más adelante usas Node)
+# Dependencies
 node_modules/
+
+# Build
+dist/
+
+# Env (no subir credenciales)
+.env
+.env.local
