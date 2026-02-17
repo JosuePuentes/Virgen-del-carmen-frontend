@@ -10,12 +10,13 @@ export default function Footer() {
     const data = {
       nombre: form.nombre.value.trim(),
       email: form.email.value.trim(),
+      telefono: form.telefono.value.trim(),
       mensaje: form.mensaje.value.trim(),
     }
 
     setLoading(true)
     try {
-      await apiPost('/api/contacto', data)
+      await apiPost('/contacto', data)
       alert('Gracias por tu mensaje. Te contactaremos pronto.')
       form.reset()
     } catch (err) {
@@ -32,11 +33,10 @@ export default function Footer() {
         <div className="footer-col">
           <h3>Mapa del sitio</h3>
           <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#medicamentos">Medicamentos</a></li>
-            <li><a href="#insumos">Insumos</a></li>
-            <li><a href="#promociones">Promociones</a></li>
-            <li><a href="#contacto">Contacto</a></li>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/catalogo">Catálogo</a></li>
+            <li><a href="/chat">Chat</a></li>
+            <li><a href="/#contacto">Contacto</a></li>
           </ul>
           <p className="footer-address">
             Dirección: Av. Principal 123<br />
@@ -61,6 +61,7 @@ export default function Footer() {
           <form className="footer-form" onSubmit={handleSubmit}>
             <input type="text" name="nombre" placeholder="Nombre" required />
             <input type="email" name="email" placeholder="Correo electrónico" required />
+            <input type="tel" name="telefono" placeholder="Teléfono" />
             <textarea name="mensaje" placeholder="Tu mensaje" rows="3" />
             <button type="submit" className="btn-footer" disabled={loading}>
               {loading ? 'Enviando…' : 'Enviar'}
