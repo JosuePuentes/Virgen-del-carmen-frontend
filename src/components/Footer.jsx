@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { apiPost } from '../config/api'
 
 export default function Footer() {
@@ -33,10 +34,11 @@ export default function Footer() {
         <div className="footer-col">
           <h3>Mapa del sitio</h3>
           <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/catalogo">Catálogo</a></li>
-            <li><a href="/chat">Chat</a></li>
-            <li><a href="/#contacto">Contacto</a></li>
+            <li><Link to="/">Inicio</Link></li>
+            <li><Link to="/catalogo">Catálogo</Link></li>
+            <li><Link to="/chat">Chat</Link></li>
+            <li><Link to="/login">Intranet / Login</Link></li>
+            <li><Link to="/#contacto">Contacto</Link></li>
           </ul>
           <p className="footer-address">
             Dirección: Av. Principal 123<br />
@@ -47,9 +49,9 @@ export default function Footer() {
         <div className="footer-col footer-center">
           <h3>Políticas y avisos</h3>
           <ul>
-            <li><a href="#">Políticas de privacidad</a></li>
-            <li><a href="#">Aviso legal</a></li>
-            <li><a href="#">Términos y condiciones</a></li>
+            <li><Link to="/#contacto">Políticas de privacidad</Link></li>
+            <li><Link to="/#contacto">Aviso legal</Link></li>
+            <li><Link to="/#contacto">Términos y condiciones</Link></li>
           </ul>
           <div className="footer-logo">
             <span className="logo-icon">⚕</span>

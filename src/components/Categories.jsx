@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const categories = [
   { icon: '💊', label: 'Medicamentos éticos' },
   { icon: '🩹', label: 'Medicamentos de venta libre' },
@@ -13,10 +15,10 @@ export default function Categories() {
         <h2 className="section-title">Explora nuestras categorías</h2>
         <div className="categories-grid">
           {categories.map((cat) => (
-            <a key={cat.label} href="#" className="category-card">
+            <Link key={cat.label} to="/catalogo" className="category-card">
               <span className="category-icon">{cat.icon}</span>
               <span>{cat.label}</span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

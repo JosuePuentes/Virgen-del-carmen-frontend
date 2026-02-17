@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
@@ -7,9 +8,23 @@ import CatalogoPage from './pages/CatalogoPage'
 import PedidosPage from './pages/PedidosPage'
 import ReclamosPage from './pages/ReclamosPage'
 
-function App() {
+function ScrollToHash() {
+  const { pathname, hash } = useLocation()
+  useEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.slice(1))
+      el?.scrollIntoView({ behavior: 'smooth' })
+    } else {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, hash])
+  return null
+}
+
+function AppRoutes() {
   return (
-    <BrowserRouter>
+    <>
+      <ScrollToHash />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -19,6 +34,14 @@ function App() {
         <Route path="/pedidos" element={<PedidosPage />} />
         <Route path="/reclamos" element={<ReclamosPage />} />
       </Routes>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
     </BrowserRouter>
   )
 }
