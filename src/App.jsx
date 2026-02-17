@@ -14,6 +14,7 @@ import AdminPedidos from './pages/admin/AdminPedidos'
 import AdminInventario from './pages/admin/AdminInventario'
 import AdminClientes from './pages/admin/AdminClientes'
 import AdminVentas from './pages/admin/AdminVentas'
+import AdminSolicitudes from './pages/admin/AdminSolicitudes'
 import AdminGuard from './components/AdminGuard'
 
 function ScrollToHash() {
@@ -44,6 +45,7 @@ function AppRoutes() {
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
           <Route index element={<AdminDashboard />} />
+          <Route path="solicitudes" element={<AdminSolicitudes />} />
           <Route path="pedidos" element={<AdminPedidos />} />
           <Route path="inventario" element={<AdminInventario />} />
           <Route path="clientes" element={<AdminClientes />} />

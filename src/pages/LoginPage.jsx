@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { apiPost, setToken, setRif } from '../config/api'
+import { loginCliente, setToken, setRif } from '../config/api'
 import Header from '../components/Header'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
@@ -17,11 +17,15 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      const res = await apiPost('/login/', { email, password })
-      setToken(res.access_token)
-      if (res.rif) setRif(res.rif)
-      navigate('/')
-      window.location.reload()
+      const result = await loginCliente(email, password)
+      if (result.ok && result.data?.access_token) {
+        setToken(result.data.access_token)
+        if (result.data.rif) setRif(result.data.rif)
+        navigate('/')
+        window.location.reload()
+      } else {
+        setError(result.error || 'Error al iniciar sesión')
+      }
     } catch (err) {
       setError(err.message || 'Error al iniciar sesión')
     } finally {

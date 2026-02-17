@@ -23,6 +23,9 @@ export default function AdminLayout() {
           <Link to="/admin" className={location.pathname === '/admin' ? 'active' : ''}>
             Inicio
           </Link>
+          <Link to="/admin/solicitudes" className={location.pathname.startsWith('/admin/solicitudes') ? 'active' : ''}>
+            Solicitudes
+          </Link>
           <Link to="/admin/pedidos" className={location.pathname.startsWith('/admin/pedidos') ? 'active' : ''}>
             Pedidos
           </Link>

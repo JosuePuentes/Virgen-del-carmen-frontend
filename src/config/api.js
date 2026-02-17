@@ -115,6 +115,23 @@ export async function apiPost(path, body, token = null) {
   return res.json().catch(() => ({}))
 }
 
+/** Login cliente: devuelve { ok, data, error } para manejar 403 (pendiente/rechazado) */
+export async function loginCliente(email, password) {
+  const url = getApiUrl('login/')
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ email, password }),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (res.ok) return { ok: true, data }
+  if (res.status === 403) {
+    const msg = Array.isArray(data.detail) ? data.detail[0]?.msg || data.detail[0] : data.detail || 'Acceso denegado'
+    return { ok: false, error: typeof msg === 'string' ? msg : JSON.stringify(msg) }
+  }
+  return { ok: false, error: data.detail || data.message || 'Error al iniciar sesión' }
+}
+
 export async function apiPut(path, body, token = null) {
   const url = getApiUrl(path)
   const res = await fetch(url, {

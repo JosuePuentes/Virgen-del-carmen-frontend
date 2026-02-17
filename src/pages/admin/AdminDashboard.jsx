@@ -6,6 +6,11 @@ export default function AdminDashboard() {
       <h1>Panel administrativo</h1>
       <p className="admin-welcome">Bienvenido al área de administración.</p>
       <div className="admin-cards">
+        <Link to="/admin/solicitudes" className="admin-card">
+          <span className="admin-card-icon">📝</span>
+          <h3>Solicitudes</h3>
+          <p>Solicitudes de nuevos clientes pendientes de aprobación</p>
+        </Link>
         <Link to="/admin/pedidos" className="admin-card">
           <span className="admin-card-icon">📦</span>
           <h3>Pedidos</h3>
