@@ -22,8 +22,14 @@ export function getToken() {
 }
 
 export function setToken(token) {
-  if (token) localStorage.setItem('token', token)
-  else localStorage.removeItem('token')
+  if (token) {
+    localStorage.setItem('token', token)
+    localStorage.removeItem('admin_token')
+    localStorage.removeItem('admin_user')
+    localStorage.removeItem('admin_modulos')
+  } else {
+    localStorage.removeItem('token')
+  }
 }
 
 export function getRif() {
@@ -33,6 +39,59 @@ export function getRif() {
 export function setRif(rif) {
   if (rif) localStorage.setItem('rif', rif)
   else localStorage.removeItem('rif')
+}
+
+/* Área administrativa */
+export function getAdminToken() {
+  return localStorage.getItem('admin_token')
+}
+
+export function setAdminToken(token) {
+  if (token) {
+    localStorage.setItem('admin_token', token)
+    localStorage.removeItem('token')
+    localStorage.removeItem('rif')
+  } else {
+    localStorage.removeItem('admin_token')
+  }
+}
+
+export function getAdminUser() {
+  try {
+    const u = localStorage.getItem('admin_user')
+    return u ? JSON.parse(u) : null
+  } catch {
+    return null
+  }
+}
+
+export function setAdminUser(user) {
+  if (user) localStorage.setItem('admin_user', JSON.stringify(user))
+  else localStorage.removeItem('admin_user')
+}
+
+export function getAdminModulos() {
+  try {
+    const m = localStorage.getItem('admin_modulos')
+    return m ? JSON.parse(m) : []
+  } catch {
+    return []
+  }
+}
+
+export function setAdminModulos(modulos) {
+  if (modulos?.length) localStorage.setItem('admin_modulos', JSON.stringify(modulos))
+  else localStorage.removeItem('admin_modulos')
+}
+
+export function isAdminLoggedIn() {
+  return !!getAdminToken()
+}
+
+export function logoutAdmin() {
+  localStorage.removeItem('admin_token')
+  localStorage.removeItem('admin_user')
+  localStorage.removeItem('admin_modulos')
 }
 
 export async function apiGet(path, token = null) {

@@ -60,6 +60,9 @@ export default function LoginPage() {
             <p className="auth-link">
               ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
             </p>
+            <p className="auth-link auth-link-small">
+              ¿Eres administrador? <Link to="/admin/login">Acceso intranet</Link>
+            </p>
           </div>
         </div>
       </main>
