@@ -10,6 +10,7 @@ export default function RegisterPage() {
     email: '',
     password: '',
     rif: '',
+    empresa: '',
     direccion: '',
     telefono: '',
     encargado: '',
@@ -75,6 +76,14 @@ export default function RegisterPage() {
                 name="rif"
                 placeholder="RIF"
                 value={form.rif}
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="text"
+                name="empresa"
+                placeholder="Nombre de la empresa"
+                value={form.empresa}
                 onChange={handleChange}
                 required
               />
