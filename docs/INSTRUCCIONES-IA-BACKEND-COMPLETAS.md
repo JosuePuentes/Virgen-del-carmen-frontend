@@ -131,8 +131,14 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ## 13. Usuarios administrativos y permisos
 
+### Listar usuarios
+- `GET /usuarios/admin/` – listar todos los usuarios admin. Cada item: _id, usuario, nombre, rol, modulos
+
 ### Crear usuario
 - `POST /register/admin/` – body: `{ "cedula", "nombre", "telefono", "usuario", "password", "rol", "modulos" }`
+
+### Actualizar permisos
+- `PATCH /usuarios/admin/{id}` – body: `{ "modulos": [...], "rol"?, "nombre"?, "telefono"?, "password"? }` para editar permisos y datos del usuario
 - `modulos`: array de strings con los permisos. Ej: `["solicitudes_clientes", "pedidos", "inventario", "clientes", "finanzas", ...]`
 
 ### Lista de módulos (permisos) que el frontend usa
