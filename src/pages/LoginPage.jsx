@@ -21,8 +21,9 @@ export default function LoginPage() {
       if (result.ok && result.data) {
         if (result.rol === 'admin') {
           setAdminToken(result.data.access_token)
-          setAdminUser({ usuario: result.data.usuario })
-          setAdminModulos(result.data.modulos || [])
+          setAdminUser({ usuario: result.data.usuario, rol: result.data.rol })
+          const modulos = result.data.rol === 'master' ? ['master'] : (result.data.modulos || [])
+          setAdminModulos(modulos)
           navigate('/admin')
         } else {
           setToken(result.data.access_token)
