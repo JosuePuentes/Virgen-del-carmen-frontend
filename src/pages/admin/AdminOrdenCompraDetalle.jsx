@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { apiGet, apiPost, apiPut, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminOrdenCompraDetalle() {
   const { id } = useParams()
@@ -160,13 +161,13 @@ export default function AdminOrdenCompraDetalle() {
                 <div key={i.codigo} className="carrito-item">
                   <span>{i.descripcion}</span>
                   <input type="number" min="1" value={i.cantidad} onChange={(e) => cambiarCantidad(i.codigo, e.target.value)} className="carrito-cant" />
-                  <span>Bs. {((i.costo || 0) * (i.cantidad || 0)).toFixed(2)}</span>
+                  <span><Precio value={(i.costo || 0) * (i.cantidad || 0)} /></span>
                   <button type="button" className="btn-rechazar btn-sm" onClick={() => quitarDelCarrito(i.codigo)}>×</button>
                 </div>
               ))
             )}
           </div>
-          <p className="carrito-total"><strong>Total: Bs. {total.toFixed(2)}</strong></p>
+          <p className="carrito-total"><strong>Total: <Precio value={total} /></strong></p>
           <div className="compras-btns">
             <button type="button" className="btn-hero" onClick={guardarCambios} disabled={guardando || items.length === 0}>
               {guardando ? '…' : 'Guardar cambios'}

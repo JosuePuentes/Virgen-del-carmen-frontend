@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { apiGet } from '../config/api'
 import Header from '../components/Header'
+import { Precio } from '../components/Precio'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 
@@ -64,7 +65,7 @@ export default function CatalogoPage() {
                       <h3 className="producto-nombre">{p.descripcion || p.nombre || 'Sin nombre'}</h3>
                       {p.laboratorio && <span className="producto-lab">{p.laboratorio}</span>}
                       <p className="producto-precio">
-                        {typeof p.precio === 'number' ? `Bs. ${p.precio.toFixed(2)}` : p.precio || '—'}
+                        <Precio value={p.precio} />
                       </p>
                     </div>
                   </article>

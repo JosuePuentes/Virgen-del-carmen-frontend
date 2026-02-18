@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminCuentasPorCobrar() {
   const [facturasVigentes, setFacturasVigentes] = useState([])
@@ -60,7 +61,7 @@ export default function AdminCuentasPorCobrar() {
                         <td>{f.numero || f._id || '—'}</td>
                         <td>{f.cliente || f.empresa || '—'}</td>
                         <td>{f.rif || '—'}</td>
-                        <td>Bs. {typeof f.monto === 'number' ? f.monto.toFixed(2) : f.total ?? '—'}</td>
+                        <td><Precio value={f.monto ?? f.total} /></td>
                         <td>{f.fecha_emision ? f.fecha_emision.slice(0, 10) : '—'}</td>
                         <td className="dias-ok">{f.dias_restantes ?? f.dias_credito_restantes ?? '—'}</td>
                         <td>{f.fecha_vencimiento ? f.fecha_vencimiento.slice(0, 10) : '—'}</td>
@@ -95,7 +96,7 @@ export default function AdminCuentasPorCobrar() {
                         <td>{f.numero || f._id || '—'}</td>
                         <td>{f.cliente || f.empresa || '—'}</td>
                         <td>{f.rif || '—'}</td>
-                        <td>Bs. {typeof f.monto === 'number' ? f.monto.toFixed(2) : f.total ?? '—'}</td>
+                        <td><Precio value={f.monto ?? f.total} /></td>
                         <td>{f.fecha_vencimiento ? f.fecha_vencimiento.slice(0, 10) : '—'}</td>
                         <td className="dias-vencido">{f.dias_vencidos ?? '—'}</td>
                       </tr>

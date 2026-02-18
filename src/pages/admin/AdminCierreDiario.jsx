@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminCierreDiario() {
   const [resumen, setResumen] = useState(null)
@@ -96,15 +97,15 @@ export default function AdminCierreDiario() {
           </div>
           <div className="admin-card">
             <h3>Monto total</h3>
-            <p className="admin-card-valor">Bs. {typeof resumen.monto_total === 'number' ? resumen.monto_total.toFixed(2) : resumen.monto_total ?? '—'}</p>
+            <p className="admin-card-valor"><Precio value={resumen.monto_total} /></p>
           </div>
           <div className="admin-card">
             <h3>Gastos</h3>
-            <p className="admin-card-valor">Bs. {typeof resumen.gastos === 'number' ? resumen.gastos.toFixed(2) : resumen.gastos ?? '—'}</p>
+            <p className="admin-card-valor"><Precio value={resumen.gastos} /></p>
           </div>
           <div className="admin-card">
             <h3>Utilidad</h3>
-            <p className="admin-card-valor">Bs. {typeof resumen.utilidad === 'number' ? resumen.utilidad.toFixed(2) : resumen.utilidad ?? '—'}</p>
+            <p className="admin-card-valor"><Precio value={resumen.utilidad} /></p>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPut, apiPost, getAdminToken } from '../../config/api'
 import { Link } from 'react-router-dom'
+import { Precio } from '../../components/Precio'
 
 export default function AdminOrdenesCompra() {
   const [ordenes, setOrdenes] = useState([])
@@ -61,7 +62,7 @@ export default function AdminOrdenesCompra() {
                   <tr key={o._id || o.id}>
                     <td>{String(o._id || o.id).slice(-8)}</td>
                     <td>{o.proveedor_empresa || o.proveedor?.empresa || o.proveedor_rif || '—'}</td>
-                    <td>Bs. {typeof o.total === 'number' ? o.total.toFixed(2) : o.total ?? '—'}</td>
+                    <td><Precio value={o.total} /></td>
                     <td>{o.totalizada || o.estado === 'totalizada' ? 'Totalizada' : 'Pendiente'}</td>
                     <td>{o.fecha ? o.fecha.slice(0, 10) : '—'}</td>
                     <td>

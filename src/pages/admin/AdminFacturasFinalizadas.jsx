@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminFacturasFinalizadas() {
   const [topClientes, setTopClientes] = useState([])
@@ -50,7 +51,7 @@ export default function AdminFacturasFinalizadas() {
                       <tr key={c.rif || c._id || i}>
                         <td>{c.cliente || c.empresa || c.encargado || '—'}</td>
                         <td>{c.rif || '—'}</td>
-                        <td>Bs. {typeof c.total === 'number' ? c.total.toFixed(2) : c.total ?? '—'}</td>
+                        <td><Precio value={c.total} /></td>
                         <td>{c.cantidad_pedidos ?? c.pedidos ?? '—'}</td>
                       </tr>
                     ))}
@@ -81,7 +82,7 @@ export default function AdminFacturasFinalizadas() {
           </section>
           <section className="admin-section">
             <h2>Facturas pagadas</h2>
-            <p className="admin-total">Total pagado: <strong>Bs. {totalPagado.toFixed(2)}</strong></p>
+            <p className="admin-total">Total pagado: <strong><Precio value={totalPagado} /></strong></p>
             <div className="admin-table-wrap">
               {facturasPagadas.length === 0 ? <p className="catalogo-empty">No hay facturas pagadas.</p> : (
                 <table className="admin-table admin-table-wide">
@@ -92,7 +93,7 @@ export default function AdminFacturasFinalizadas() {
                         <td>{f.numero || f._id || '—'}</td>
                         <td>{f.cliente || f.empresa || '—'}</td>
                         <td>{f.rif || '—'}</td>
-                        <td>Bs. {typeof f.monto === 'number' ? f.monto.toFixed(2) : f.total ?? '—'}</td>
+                        <td><Precio value={f.monto ?? f.total} /></td>
                         <td>{f.fecha_pago ? f.fecha_pago.slice(0, 10) : '—'}</td>
                       </tr>
                     ))}

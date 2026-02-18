@@ -8,6 +8,15 @@ Copia y pega este documento cuando trabajes con la IA de tu backend (Zas-backend
 
 El frontend Virgen del Carmen necesita un backend que soporte toda la lógica de negocio descrita. El frontend está en Vite + React y se conecta vía `VITE_API_URL`. Todas las peticiones admin llevan `Authorization: Bearer <token>`.
 
+**Moneda:** Todo el sistema usa dólares ($) como moneda principal. Los precios se muestran en $ y Bs (Bs = $ × tasa BCV).
+
+---
+
+## 0. Tasa BCV (control cambiario)
+
+- `GET /bcv/` – devuelve la tasa actual del dólar BCV. Respuesta: `{ "tasa": number }` o `{ "rate": number }`. Puede ser público (sin auth) para que el catálogo y clientes vean precios.
+- `PUT /bcv/` – actualiza la tasa. Body: `{ "tasa": number }`. Requiere token admin.
+
 ---
 
 ## 1. Dashboard principal

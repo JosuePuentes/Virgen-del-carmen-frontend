@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPost, apiDelete, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminGastos() {
   const [gastos, setGastos] = useState([])
@@ -81,7 +82,7 @@ export default function AdminGastos() {
       <section className="admin-section">
         <h2>Registrar gasto</h2>
         <form onSubmit={handleCrear} className="admin-form admin-form-grid">
-          <input name="monto" type="number" step="0.01" placeholder="Monto (Bs)" value={form.monto} onChange={handleChange} required />
+          <input name="monto" type="number" step="0.01" placeholder="Monto ($)" value={form.monto} onChange={handleChange} required />
           <input name="descripcion" placeholder="Descripción" value={form.descripcion} onChange={handleChange} />
           <input name="fecha" type="date" value={form.fecha || new Date().toISOString().slice(0, 10)} onChange={handleChange} />
           <input name="categoria" placeholder="Categoría" value={form.categoria} onChange={handleChange} />
@@ -125,7 +126,7 @@ export default function AdminGastos() {
                     <td>{g.fecha ? g.fecha.slice(0, 10) : '—'}</td>
                     <td>{g.descripcion || '—'}</td>
                     <td>{g.categoria || '—'}</td>
-                    <td>Bs. {typeof g.monto === 'number' ? g.monto.toFixed(2) : g.monto}</td>
+                    <td><Precio value={g.monto} /></td>
                     <td>
                       <button type="button" className="btn-rechazar btn-sm" onClick={() => handleEliminar(g._id || g.id)}>Eliminar</button>
                     </td>

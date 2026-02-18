@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPost, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminClientes() {
   const [clientes, setClientes] = useState([])
@@ -74,7 +75,7 @@ export default function AdminClientes() {
           <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
           <input name="direccion" placeholder="Dirección" value={form.direccion} onChange={handleChange} />
           <input name="dias_credito" type="number" placeholder="Días de crédito" value={form.dias_credito || ''} onChange={handleChange} />
-          <input name="limite_credito" type="number" step="0.01" placeholder="Límite de crédito (Bs)" value={form.limite_credito || ''} onChange={handleChange} />
+          <input name="limite_credito" type="number" step="0.01" placeholder="Límite de crédito ($)" value={form.limite_credito || ''} onChange={handleChange} />
           <button type="submit" className="btn-hero" disabled={creando}>
             {creando ? 'Creando…' : 'Crear cliente'}
           </button>
@@ -107,7 +108,7 @@ export default function AdminClientes() {
                     <td>{c.encargado || '—'}</td>
                     <td>{c.telefono || '—'}</td>
                     <td>{c.dias_credito ?? '—'}</td>
-                    <td>Bs. {typeof c.limite_credito === 'number' ? c.limite_credito.toFixed(2) : c.limite_credito || '—'}</td>
+                    <td><Precio value={c.limite_credito} /></td>
                   </tr>
                 ))}
               </tbody>

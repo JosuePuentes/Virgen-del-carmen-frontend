@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPut, apiPost, getAdminToken, getAdminUser } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminPedidosAdministracion() {
   const [pedidos, setPedidos] = useState([])
@@ -82,9 +83,9 @@ export default function AdminPedidosAdministracion() {
                     <tr key={p._id || p.id}>
                       <td>{String(p._id || p.id).slice(-8)}</td>
                       <td>{p.cliente || p.rif || '—'}</td>
-                      <td>Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total || '—'}</td>
-                      <td>Bs. {p.limite_credito ?? '—'}</td>
-                      <td>Bs. {p.limite_consumido ?? '—'}</td>
+                      <td><Precio value={p.total} /></td>
+                      <td><Precio value={p.limite_credito} /></td>
+                      <td><Precio value={p.limite_consumido} /></td>
                       <td>{tieneFacturasVencidas ? 'Sí' : 'No'}</td>
                       <td>
                         {esConPin ? (

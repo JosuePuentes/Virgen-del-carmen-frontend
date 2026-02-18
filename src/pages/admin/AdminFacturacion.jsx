@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPut, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://droclven-back.onrender.com'
 
@@ -84,7 +85,7 @@ export default function AdminFacturacion() {
                   <tr key={p._id || p.id}>
                     <td>{String(p._id || p.id).slice(-8)}</td>
                     <td>{p.cliente || p.rif}</td>
-                    <td>Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total}</td>
+                    <td><Precio value={p.total} /></td>
                     <td>
                       <button
                         type="button"

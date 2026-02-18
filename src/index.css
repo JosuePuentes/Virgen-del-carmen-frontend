@@ -961,12 +961,23 @@ ul {
 
 .admin-sidebar-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem;
   padding: 0 1.25rem 1rem;
   font-weight: 700;
   font-family: var(--font-serif);
   border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.admin-bcv-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin-left: auto;
 }
 
 .admin-sidebar-search {
@@ -1067,6 +1078,73 @@ ul {
 .admin-welcome {
   color: var(--text-muted);
   margin: 0 0 1.5rem;
+}
+
+.dashboard-bcv-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  max-width: 420px;
+}
+
+.dashboard-bcv-card h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.dashboard-bcv-valor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bcv-actual {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.bcv-editar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bcv-editar input {
+  width: 90px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.bcv-editar button {
+  padding: 0.4rem 0.75rem;
+  background: var(--ocre);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.bcv-editar button:hover:not(:disabled) {
+  background: var(--gold);
+}
+
+.bcv-editar button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bcv-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 .admin-cards {

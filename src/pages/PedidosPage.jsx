@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { apiGet, apiPost, getToken, getRif } from '../config/api'
 import Header from '../components/Header'
+import { Precio } from '../components/Precio'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 
@@ -66,7 +67,7 @@ export default function PedidosPage() {
                       </span>
                     </div>
                     <div className="pedido-body">
-                      <p>Total: Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total || '—'}</p>
+                      <p>Total: <Precio value={p.total} /></p>
                       {p.observacion && <p className="pedido-obs">{p.observacion}</p>}
                       {p.fecha && <p className="pedido-fecha">{p.fecha}</p>}
                     </div>

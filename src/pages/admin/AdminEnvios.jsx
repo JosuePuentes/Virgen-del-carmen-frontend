@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminEnvios() {
   const [pedidos, setPedidos] = useState([])
@@ -45,7 +46,7 @@ export default function AdminEnvios() {
                   <tr key={p._id || p.id}>
                     <td>{String(p._id || p.id).slice(-8)}</td>
                     <td>{p.cliente || p.rif || '—'}</td>
-                    <td>Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total || '—'}</td>
+                    <td><Precio value={p.total} /></td>
                   </tr>
                 ))}
               </tbody>

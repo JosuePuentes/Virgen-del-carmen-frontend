@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { apiGet, getAdminToken, getAdminModulos } from '../../config/api'
+import { useBcv } from '../../context/BcvContext'
+import { Precio } from '../../components/Precio'
 
 const ESTADOS = [
   { key: 'nuevo', label: 'En espera', ruta: 'administracion' },
@@ -11,8 +13,11 @@ const ESTADOS = [
 ]
 
 export default function AdminDashboard() {
+  const { bcv, setBcvLocal, guardarBcv, loading: bcvLoading } = useBcv()
   const [pedidosPorEstado, setPedidosPorEstado] = useState({})
   const [loading, setLoading] = useState(true)
+  const [bcvEdit, setBcvEdit] = useState('')
+  const [bcvExito, setBcvExito] = useState('')
   const modulos = getAdminModulos()
   const hasModulo = (m) => !modulos?.length || modulos.includes(m)
 
@@ -45,6 +50,46 @@ export default function AdminDashboard() {
   return (
     <div className="admin-dashboard">
       <h1>Dashboard</h1>
+      <div className="dashboard-bcv-card">
+        <h3>💵 Tasa BCV (Dólar)</h3>
+        <div className="dashboard-bcv-valor">
+          <span className="bcv-actual">1 USD = Bs. {bcv.toFixed(2)}</span>
+          <div className="bcv-editar">
+            <input
+              type="number"
+              step="0.01"
+              min="0.01"
+              placeholder={bcv.toFixed(2)}
+              value={bcvEdit}
+              onChange={(e) => setBcvEdit(e.target.value)}
+              onBlur={async () => {
+                const v = parseFloat(bcvEdit)
+                if (Number.isFinite(v) && v > 0) {
+                  const ok = await guardarBcv(v)
+                  setBcvEdit('')
+                  if (ok) { setBcvExito('Tasa BCV actualizada'); setTimeout(() => setBcvExito(''), 3000) }
+                }
+              }}
+            />
+            <button
+              type="button"
+              disabled={bcvLoading || !bcvEdit}
+              onClick={async () => {
+                const v = parseFloat(bcvEdit)
+                if (Number.isFinite(v) && v > 0) {
+                  const ok = await guardarBcv(v)
+                  setBcvEdit('')
+                  if (ok) { setBcvExito('Tasa BCV actualizada'); setTimeout(() => setBcvExito(''), 3000) }
+                }
+              }}
+            >
+              {bcvLoading ? 'Guardando...' : 'Actualizar'}
+            </button>
+          </div>
+        </div>
+        <p className="bcv-hint">Todos los precios se muestran en $ USD y Bs (Bs = $ × BCV)</p>
+        {bcvExito && <p className="auth-success">{bcvExito}</p>}
+      </div>
       <p className="admin-welcome">Historial de pedidos por estado.</p>
       {loading ? (
         <p className="catalogo-loading">Cargando...</p>
@@ -68,7 +113,7 @@ export default function AdminDashboard() {
                       <div key={p._id || p.id} className="dashboard-pedido-item">
                         <span className="pedido-id">#{String(p._id || p.id).slice(-6)}</span>
                         <span>{p.cliente || p.rif || '—'}</span>
-                        <span>Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total || '—'}</span>
+                        <span><Precio value={p.total} /></span>
                       </div>
                     ))
                   )}
@@ -130,7 +175,7 @@ export default function AdminDashboard() {
           <h3>Gastos</h3>
           <p>Registrar gastos</p>
         </Link>
-        <Link to="/admin/cierre" className="admin-card">
+        <Link to="/admin/cierre-diario" className="admin-card">
           <span className="admin-card-icon">📊</span>
           <h3>Cierre diario</h3>
           <p>Resumen por fechas</p>

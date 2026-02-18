@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminVentas() {
   const [ventas, setVentas] = useState([])
@@ -47,7 +48,7 @@ export default function AdminVentas() {
                   <tr key={v._id || v.id}>
                     <td>{String(v._id || v.id).slice(-8)}</td>
                     <td>{v.cliente_nombre || v.cliente_rif || '—'}</td>
-                    <td>Bs. {typeof v.total === 'number' ? v.total.toFixed(2) : v.total || '—'}</td>
+                    <td><Precio value={v.total} /></td>
                     <td>{v.metodo_pago || '—'}</td>
                   </tr>
                 ))}

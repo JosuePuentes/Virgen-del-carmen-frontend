@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, apiPost, apiPostForm, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminInventario() {
   const [productos, setProductos] = useState([])
@@ -148,7 +149,7 @@ export default function AdminInventario() {
                     <td>{p.codigo || p._id}</td>
                     <td>{p.descripcion || p.nombre || '—'}</td>
                     <td>{p.marca || p.laboratorio || '—'}</td>
-                    <td>Bs. {typeof p.precio === 'number' ? p.precio.toFixed(2) : p.precio || '—'}</td>
+                    <td><Precio value={p.precio} /></td>
                     <td>{p.existencia ?? '—'}</td>
                   </tr>
                 ))}

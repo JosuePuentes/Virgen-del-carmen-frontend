@@ -119,7 +119,7 @@ export default function AdminSolicitudes() {
             <h3>Aprobar cliente: {modalAprobar.empresa || modalAprobar.rif}</h3>
             <form onSubmit={handleAprobar}>
               <label>
-                Límite de crédito (Bs.)
+                Límite de crédito ($)
                 <input type="number" step="0.01" value={formAprobar.limite_credito} onChange={(e) => setFormAprobar((f) => ({ ...f, limite_credito: e.target.value }))} required />
               </label>
               <label>

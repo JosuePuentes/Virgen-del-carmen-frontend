@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { apiGet, apiPostForm, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminListaComparativa() {
   const [proveedores, setProveedores] = useState([])
@@ -174,7 +175,7 @@ export default function AdminListaComparativa() {
                             <td>{r.codigo || cod}</td>
                             <td>{r.descripcion || r.nombre || '—'}</td>
                             <td>{r.marca || '—'}</td>
-                            <td>Bs. {typeof r.precio_final === 'number' ? r.precio_final.toFixed(2) : (r.precio ?? '—')}</td>
+                            <td><Precio value={r.precio_final ?? r.precio} /></td>
                             <td>{r.existencia ?? '—'}</td>
                             <td>{idx === 0 ? '✓' : ''}</td>
                           </tr>

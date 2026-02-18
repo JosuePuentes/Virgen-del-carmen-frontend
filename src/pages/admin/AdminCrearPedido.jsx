@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { apiGet, apiPost, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminCrearPedido() {
   const [clientes, setClientes] = useState([])
@@ -131,7 +132,7 @@ export default function AdminCrearPedido() {
               <div key={p.codigo || p._id} className="crear-pedido-item">
                 <span>{p.codigo}</span>
                 <span>{p.descripcion || p.nombre}</span>
-                <span>Bs. {typeof p.precio === 'number' ? p.precio.toFixed(2) : p.precio}</span>
+                <span><Precio value={p.precio} /></span>
                 <span>Exist: {p.existencia ?? '—'}</span>
                 <button type="button" className="btn-aprobar btn-sm" onClick={() => agregarAlCarrito(p)}>+</button>
               </div>
@@ -149,13 +150,13 @@ export default function AdminCrearPedido() {
                 <div key={i.codigo} className="carrito-item">
                   <span>{i.descripcion}</span>
                   <input type="number" min="1" value={i.cantidad_pedida} onChange={(e) => cambiarCantidad(i.codigo, e.target.value)} className="carrito-cant" />
-                  <span>Bs. {(i.precio * (i.cantidad_pedida || 0)).toFixed(2)}</span>
+                  <span><Precio value={(i.precio || 0) * (i.cantidad_pedida || 0)} /></span>
                   <button type="button" className="btn-rechazar btn-sm" onClick={() => quitarDelCarrito(i.codigo)}>×</button>
                 </div>
               ))
             )}
           </div>
-          <p className="carrito-total"><strong>Total: Bs. {total.toFixed(2)}</strong></p>
+          <p className="carrito-total"><strong>Total: <Precio value={total} /></strong></p>
           <label>
             Observación
             <textarea value={observacion} onChange={(e) => setObservacion(e.target.value)} rows="2" />

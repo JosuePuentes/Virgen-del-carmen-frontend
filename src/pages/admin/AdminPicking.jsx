@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { apiGet, apiPatch, apiPut, getAdminToken, getAdminUser } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminPicking() {
   const [pedidos, setPedidos] = useState([])
@@ -131,7 +132,7 @@ export default function AdminPicking() {
                       <tr key={p._id || p.id}>
                         <td>{String(p._id || p.id).slice(-8)}</td>
                         <td>{p.cliente || p.rif}</td>
-                        <td>Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total}</td>
+                        <td><Precio value={p.total} /></td>
                         <td>
                           <button type="button" className="btn-aprobar" onClick={() => setPedidoSel(p)}>Seleccionar</button>
                         </td>
@@ -147,7 +148,7 @@ export default function AdminPicking() {
         <div className="picking-activo">
           <div className="picking-header">
             <h3>Pedido #{String(pedidoSel._id || pedidoSel.id).slice(-8)} – {pedidoSel.cliente || pedidoSel.rif}</h3>
-            <p>Total: Bs. {typeof pedidoSel.total === 'number' ? pedidoSel.total.toFixed(2) : pedidoSel.total}</p>
+            <p>Total: <Precio value={pedidoSel.total} /></p>
             <button type="button" className="btn-secondary" onClick={() => setPedidoSel(null)}>Cambiar pedido</button>
           </div>
 

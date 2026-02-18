@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { getAdminUser, hasModulo, logoutAdmin } from '../../config/api'
+import { useBcv } from '../../context/BcvContext'
 
 const ITEMS_MENU = [
   { to: '/admin', label: 'Dashboard', modulo: null },
@@ -32,6 +33,7 @@ export default function AdminLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const user = getAdminUser()
+  const { bcv } = useBcv()
   const [busqueda, setBusqueda] = useState('')
 
   const itemsVisibles = useMemo(() => {
@@ -58,6 +60,7 @@ export default function AdminLayout() {
         <div className="admin-sidebar-header">
           <span className="admin-logo">⚕</span>
           <span>Panel Admin</span>
+          <span className="admin-bcv-badge" title="Tasa BCV">$ = Bs. {bcv.toFixed(2)}</span>
         </div>
         <div className="admin-sidebar-search">
           <input

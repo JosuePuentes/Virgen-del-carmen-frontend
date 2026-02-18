@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminFinanzas() {
   const [resumen, setResumen] = useState(null)
@@ -58,23 +59,23 @@ export default function AdminFinanzas() {
             </div>
             <div className="admin-card">
               <h3>Valor vendido</h3>
-              <p className="admin-card-valor">Bs. {typeof resumen?.valor_vendido === 'number' ? resumen.valor_vendido.toFixed(2) : resumen?.valor_vendido ?? '—'}</p>
+              <p className="admin-card-valor"><Precio value={resumen?.valor_vendido} /></p>
             </div>
             <div className="admin-card">
               <h3>Utilidad</h3>
-              <p className="admin-card-valor">Bs. {typeof resumen?.utilidad === 'number' ? resumen.utilidad.toFixed(2) : resumen?.utilidad ?? '—'}</p>
+              <p className="admin-card-valor"><Precio value={resumen?.utilidad} /></p>
             </div>
             <div className="admin-card">
               <h3>Cuentas por cobrar</h3>
-              <p className="admin-card-valor">Bs. {typeof cuentasCobrar === 'number' ? cuentasCobrar.toFixed(2) : cuentasCobrar}</p>
+              <p className="admin-card-valor"><Precio value={cuentasCobrar} /></p>
             </div>
             <div className="admin-card">
               <h3>Cuentas por pagar</h3>
-              <p className="admin-card-valor">Bs. {typeof cuentasPagar === 'number' ? cuentasPagar.toFixed(2) : cuentasPagar}</p>
+              <p className="admin-card-valor"><Precio value={cuentasPagar} /></p>
             </div>
             <div className="admin-card">
               <h3>Gastos</h3>
-              <p className="admin-card-valor">Bs. {typeof gastos === 'number' ? gastos.toFixed(2) : gastos}</p>
+              <p className="admin-card-valor"><Precio value={gastos} /></p>
             </div>
           </div>
           <section className="admin-section resumen-financiero">
@@ -82,23 +83,23 @@ export default function AdminFinanzas() {
             <div className="resumen-grid">
               <div className="resumen-item">
                 <span>Ingresos (valor vendido)</span>
-                <strong>Bs. {typeof resumen?.valor_vendido === 'number' ? resumen.valor_vendido.toFixed(2) : resumen?.valor_vendido ?? '—'}</strong>
+                <strong><Precio value={resumen?.valor_vendido} /></strong>
               </div>
               <div className="resumen-item">
                 <span>Por cobrar</span>
-                <strong>Bs. {typeof cuentasCobrar === 'number' ? cuentasCobrar.toFixed(2) : cuentasCobrar}</strong>
+                <strong><Precio value={cuentasCobrar} /></strong>
               </div>
               <div className="resumen-item">
                 <span>Por pagar</span>
-                <strong>Bs. {typeof cuentasPagar === 'number' ? cuentasPagar.toFixed(2) : cuentasPagar}</strong>
+                <strong><Precio value={cuentasPagar} /></strong>
               </div>
               <div className="resumen-item">
                 <span>Gastos</span>
-                <strong>Bs. {typeof gastos === 'number' ? gastos.toFixed(2) : gastos}</strong>
+                <strong><Precio value={gastos} /></strong>
               </div>
               <div className="resumen-item resumen-utilidad">
                 <span>Utilidad neta</span>
-                <strong>Bs. {typeof resumen?.utilidad === 'number' ? resumen.utilidad.toFixed(2) : resumen?.utilidad ?? '—'}</strong>
+                <strong><Precio value={resumen?.utilidad} /></strong>
               </div>
             </div>
           </section>
@@ -114,7 +115,7 @@ export default function AdminFinanzas() {
                         <td>{p.codigo || '—'}</td>
                         <td>{p.descripcion || p.nombre || '—'}</td>
                         <td>{p.cantidad ?? p.vendidos ?? '—'}</td>
-                        <td>Bs. {typeof p.monto === 'number' ? p.monto.toFixed(2) : p.monto ?? '—'}</td>
+                        <td><Precio value={p.monto} /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -134,7 +135,7 @@ export default function AdminFinanzas() {
                         <td>{p.codigo || '—'}</td>
                         <td>{p.descripcion || p.nombre || '—'}</td>
                         <td>{p.cantidad ?? p.vendidos ?? '—'}</td>
-                        <td>Bs. {typeof p.monto === 'number' ? p.monto.toFixed(2) : p.monto ?? '—'}</td>
+                        <td><Precio value={p.monto} /></td>
                       </tr>
                     ))}
                   </tbody>
@@ -149,7 +150,7 @@ export default function AdminFinanzas() {
                 {graficas.map((g, i) => (
                   <div key={g.mes || g.fecha || i} className="grafica-item">
                     <span>{g.mes || g.fecha || g.label || `Mes ${i + 1}`}</span>
-                    <span>Bs. {typeof g.valor === 'number' ? g.valor.toFixed(2) : g.valor ?? '—'}</span>
+                    <span><Precio value={g.valor} /></span>
                   </div>
                 ))}
               </div>

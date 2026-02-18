@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { apiGet, getAdminToken } from '../../config/api'
+import { Precio } from '../../components/Precio'
 
 export default function AdminCuentasPorPagar() {
   const [cuentas, setCuentas] = useState([])
@@ -34,7 +35,7 @@ export default function AdminCuentasPorPagar() {
       {loading && <p className="catalogo-loading">Cargando...</p>}
       {!loading && (
         <>
-          <p className="admin-total">Total por pagar: <strong>Bs. {total.toFixed(2)}</strong></p>
+          <p className="admin-total">Total por pagar: <strong><Precio value={total} /></strong></p>
           <div className="admin-table-wrap">
             {cuentas.length === 0 ? (
               <p className="catalogo-empty">No hay cuentas por pagar.</p>
@@ -56,7 +57,7 @@ export default function AdminCuentasPorPagar() {
                       <td>{c.proveedor_empresa || c.proveedor?.empresa || '—'}</td>
                       <td>{c.proveedor_rif || c.rif || '—'}</td>
                       <td>{c.concepto || c.descripcion || '—'}</td>
-                      <td>Bs. {typeof c.monto === 'number' ? c.monto.toFixed(2) : c.total ?? '—'}</td>
+                      <td><Precio value={c.monto ?? c.total} /></td>
                       <td>{c.fecha_vencimiento ? c.fecha_vencimiento.slice(0, 10) : '—'}</td>
                       <td>{c.dias_credito ?? '—'}</td>
                     </tr>
