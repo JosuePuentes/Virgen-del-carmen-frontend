@@ -13,7 +13,7 @@ export default function Header() {
           <a href="https://wa.me/584142981980" className="social-link" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">WhatsApp</a>
           <a href="https://facebook.com" className="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
           <a href="https://instagram.com" className="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <Link to="/admin/login" className="btn-intranet">INTRANET</Link>
+          <Link to="/login" className="btn-intranet">INTRANET</Link>
         </div>
       </div>
     </header>

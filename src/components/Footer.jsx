@@ -37,8 +37,7 @@ export default function Footer() {
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/catalogo">Catálogo</Link></li>
             <li><Link to="/chat">Chat</Link></li>
-            <li><Link to="/login">Área clientes</Link></li>
-            <li><Link to="/admin/login">Intranet admin</Link></li>
+            <li><Link to="/login">Iniciar sesión</Link></li>
             <li><Link to="/#contacto">Contacto</Link></li>
           </ul>
           <p className="footer-address">

@@ -550,6 +550,36 @@ ul {
   font-weight: 600;
 }
 
+.login-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.login-tabs button {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--border);
+  background: var(--off-white);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+
+.login-tabs button:hover {
+  border-color: var(--ocre-light);
+  color: var(--dark);
+}
+
+.login-tabs button.active {
+  border-color: var(--ocre);
+  background: var(--white);
+  color: var(--ocre);
+}
+
 /* Chat page - diseño unificado */
 .chat-page {
   padding: 2rem 0 3rem;

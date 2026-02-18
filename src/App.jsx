@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
@@ -7,7 +7,6 @@ import ChatPage from './pages/ChatPage'
 import CatalogoPage from './pages/CatalogoPage'
 import PedidosPage from './pages/PedidosPage'
 import ReclamosPage from './pages/ReclamosPage'
-import AdminLoginPage from './pages/admin/AdminLoginPage'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminPedidos from './pages/admin/AdminPedidos'
@@ -42,7 +41,7 @@ function AppRoutes() {
         <Route path="/catalogo" element={<CatalogoPage />} />
         <Route path="/pedidos" element={<PedidosPage />} />
         <Route path="/reclamos" element={<ReclamosPage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin/login" element={<Navigate to="/login?modo=admin" replace />} />
         <Route path="/admin" element={<AdminGuard><AdminLayout /></AdminGuard>}>
           <Route index element={<AdminDashboard />} />
           <Route path="solicitudes" element={<AdminSolicitudes />} />
