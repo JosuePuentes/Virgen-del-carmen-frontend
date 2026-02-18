@@ -1,12 +1,10 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
-import { getAdminUser, getAdminModulos, logoutAdmin } from '../../config/api'
+import { getAdminUser, hasModulo, logoutAdmin } from '../../config/api'
 
 export default function AdminLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const user = getAdminUser()
-  const modulos = getAdminModulos()
-  const hasModulo = (m) => !modulos?.length || modulos.includes(m)
 
   function handleLogout() {
     logoutAdmin()
@@ -55,36 +53,61 @@ export default function AdminLayout() {
               </Link>
             </>
           )}
-          <Link to="/admin/finanzas" className={location.pathname.startsWith('/admin/finanzas') ? 'active' : ''}>
-            Finanzas
-          </Link>
-          <Link to="/admin/cuentas-por-cobrar" className={location.pathname.startsWith('/admin/cuentas-por-cobrar') ? 'active' : ''}>
-            Cuentas por cobrar
-          </Link>
-          <Link to="/admin/cuentas-por-pagar" className={location.pathname.startsWith('/admin/cuentas-por-pagar') ? 'active' : ''}>
-            Cuentas por pagar
-          </Link>
-          <Link to="/admin/facturas-finalizadas" className={location.pathname.startsWith('/admin/facturas-finalizadas') ? 'active' : ''}>
-            Facturas finalizadas
-          </Link>
-          <Link to="/admin/gastos" className={location.pathname.startsWith('/admin/gastos') ? 'active' : ''}>
-            Gastos
-          </Link>
-          <Link to="/admin/cierre-diario" className={location.pathname.startsWith('/admin/cierre-diario') ? 'active' : ''}>
-            Cierre diario
-          </Link>
-          <Link to="/admin/proveedores" className={location.pathname.startsWith('/admin/proveedores') ? 'active' : ''}>
-            Proveedores
-          </Link>
-          <Link to="/admin/compras" className={location.pathname.startsWith('/admin/compras') ? 'active' : ''}>
-            Compras
-          </Link>
-          <Link to="/admin/ordenes-compra" className={location.pathname.startsWith('/admin/ordenes-compra') ? 'active' : ''}>
-            Órdenes de compra
-          </Link>
-          <Link to="/admin/lista-comparativa" className={location.pathname.startsWith('/admin/lista-comparativa') ? 'active' : ''}>
-            Lista comparativa
-          </Link>
+          {hasModulo('finanzas') && (
+            <Link to="/admin/finanzas" className={location.pathname.startsWith('/admin/finanzas') ? 'active' : ''}>
+              Finanzas
+            </Link>
+          )}
+          {hasModulo('cuentas_por_cobrar') && (
+            <Link to="/admin/cuentas-por-cobrar" className={location.pathname.startsWith('/admin/cuentas-por-cobrar') ? 'active' : ''}>
+              Cuentas por cobrar
+            </Link>
+          )}
+          {hasModulo('cuentas_por_pagar') && (
+            <Link to="/admin/cuentas-por-pagar" className={location.pathname.startsWith('/admin/cuentas-por-pagar') ? 'active' : ''}>
+              Cuentas por pagar
+            </Link>
+          )}
+          {hasModulo('facturas_finalizadas') && (
+            <Link to="/admin/facturas-finalizadas" className={location.pathname.startsWith('/admin/facturas-finalizadas') ? 'active' : ''}>
+              Facturas finalizadas
+            </Link>
+          )}
+          {hasModulo('gastos') && (
+            <Link to="/admin/gastos" className={location.pathname.startsWith('/admin/gastos') ? 'active' : ''}>
+              Gastos
+            </Link>
+          )}
+          {hasModulo('cierre_diario') && (
+            <Link to="/admin/cierre-diario" className={location.pathname.startsWith('/admin/cierre-diario') ? 'active' : ''}>
+              Cierre diario
+            </Link>
+          )}
+          {hasModulo('proveedores') && (
+            <Link to="/admin/proveedores" className={location.pathname.startsWith('/admin/proveedores') ? 'active' : ''}>
+              Proveedores
+            </Link>
+          )}
+          {hasModulo('compras') && (
+            <Link to="/admin/compras" className={location.pathname.startsWith('/admin/compras') ? 'active' : ''}>
+              Compras
+            </Link>
+          )}
+          {hasModulo('ordenes_compra') && (
+            <Link to="/admin/ordenes-compra" className={location.pathname.startsWith('/admin/ordenes-compra') ? 'active' : ''}>
+              Órdenes de compra
+            </Link>
+          )}
+          {hasModulo('lista_comparativa') && (
+            <Link to="/admin/lista-comparativa" className={location.pathname.startsWith('/admin/lista-comparativa') ? 'active' : ''}>
+              Lista comparativa
+            </Link>
+          )}
+          {hasModulo('formatos_impresion') && (
+            <Link to="/admin/formatos-impresion" className={location.pathname.startsWith('/admin/formatos-impresion') ? 'active' : ''}>
+              Formato impresión
+            </Link>
+          )}
           {hasModulo('inventario') && (
             <Link to="/admin/inventario" className={location.pathname.startsWith('/admin/inventario') ? 'active' : ''}>
               Inventario
@@ -95,9 +118,11 @@ export default function AdminLayout() {
               Clientes
             </Link>
           )}
-          <Link to="/admin/usuarios" className={location.pathname.startsWith('/admin/usuarios') ? 'active' : ''}>
-            Usuarios
-          </Link>
+          {hasModulo('usuarios') && (
+            <Link to="/admin/usuarios" className={location.pathname.startsWith('/admin/usuarios') ? 'active' : ''}>
+              Usuarios
+            </Link>
+          )}
         </nav>
         <div className="admin-sidebar-footer">
           {user?.usuario && <span className="admin-user">{user.usuario}</span>}

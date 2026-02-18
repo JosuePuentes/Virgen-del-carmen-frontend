@@ -1274,12 +1274,10 @@ ul {
   font-family: inherit;
 }
 
-.admin-form-modulos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-}
+.admin-form-modulos { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.admin-form-modulos-grid { flex-direction: column; align-items: stretch; }
+.admin-form-modulos-grid .modulos-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; font-weight: 600; }
+.admin-form-modulos-grid .admin-checkbox { margin: 0.25rem 0; }
 
 .admin-checkbox {
   display: flex;

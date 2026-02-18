@@ -86,11 +86,11 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ## 8. Formato de impresión
 
-- `GET /formatos-impresion/` – listar formatos
-- `GET /formatos-impresion/{tipo}` – obtener diseño
-- `POST /formatos-impresion/` – crear
-- `PUT /formatos-impresion/{tipo}` – actualizar
-- Definir qué campos lleva la factura (layout, logo, etc.)
+- `GET /formatos-impresion/{tipo}` – obtener diseño (tipo: "factura")
+- `POST /formatos-impresion/` – crear. Body: `{ tipo, logo_url, titulo, mostrar_rif, mostrar_direccion, mostrar_telefono, campos_extra, layout }`
+- `PUT /formatos-impresion/{tipo}` – actualizar mismo body
+- `layout`: "estandar" | "compacto" | "detallado"
+- Usar este formato al generar PDF de facturas
 
 ---
 
@@ -129,10 +129,39 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 13. Usuarios administrativos
+## 13. Usuarios administrativos y permisos
 
+### Crear usuario
 - `POST /register/admin/` – body: `{ "cedula", "nombre", "telefono", "usuario", "password", "rol", "modulos" }`
-- No exponer `costo` ni `utilidad` en endpoints usados por crear pedido
+- `modulos`: array de strings con los permisos. Ej: `["solicitudes_clientes", "pedidos", "inventario", "clientes", "finanzas", ...]`
+
+### Lista de módulos (permisos) que el frontend usa
+- `solicitudes_clientes` – Solicitudes de clientes
+- `pedidos` – Pedidos (Admin, Picking, Packing, Envíos, Crear, Facturación, Fallas)
+- `inventario` – Inventario
+- `clientes` – Clientes
+- `finanzas` – Finanzas
+- `cuentas_por_cobrar` – Cuentas por cobrar
+- `cuentas_por_pagar` – Cuentas por pagar
+- `facturas_finalizadas` – Facturas finalizadas
+- `gastos` – Gastos
+- `cierre_diario` – Cierre diario
+- `proveedores` – Proveedores
+- `compras` – Compras
+- `ordenes_compra` – Órdenes de compra
+- `lista_comparativa` – Lista comparativa
+- `formatos_impresion` – Formato de impresión
+- `usuarios` – Crear y gestionar otros usuarios (solo usuario master debe tenerlo por defecto)
+
+### Usuario master
+- El usuario **master** (o super admin) debe tener acceso a todo.
+- En el login admin, devolver `modulos: ["master"]` o `modulos: ["*"]` para el usuario master.
+- Si `modulos` incluye "master" o "*", el frontend muestra todos los módulos.
+
+### Login admin – devolver modulos
+- En la respuesta del login admin (`POST /login/admin/`), incluir `modulos` en el JSON:
+  `{ "access_token": "...", "usuario": "...", "modulos": ["pedidos", "inventario", ...] }`
+- El frontend guarda `modulos` y muestra solo los enlaces del menú para los que el usuario tiene permiso.
 
 ---
 
@@ -246,6 +275,8 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 | Órdenes de compra | CRUD, editar, totalizar (suma a inventario) |
 | Lista comparativa | Cargar Excel por proveedor, buscar, comparar precios, mi existencia |
 | Control fallas | Incluir proveedor y precio_venta por producto faltante |
+| Formato impresión | Diseño factura: logo, layout, campos |
+| Usuarios | Permisos por módulo, usuario master con modulos: ["master"] |
 
 ---
 

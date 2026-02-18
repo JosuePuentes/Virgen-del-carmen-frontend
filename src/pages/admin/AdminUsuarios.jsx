@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { apiPost, getAdminToken } from '../../config/api'
-
-const MODULOS_OPCIONES = ['solicitudes_clientes', 'pedidos', 'inventario', 'clientes']
+import { apiGet, apiPost, getAdminToken } from '../../config/api'
+import { MODULOS_PERMISOS } from '../../config/modulos'
 
 export default function AdminUsuarios() {
   const [form, setForm] = useState({
     cedula: '', nombre: '', telefono: '', usuario: '', password: '',
     rol: 'admin',
-    modulos: ['solicitudes_clientes', 'pedidos', 'inventario', 'clientes'],
+    modulos: [],
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -25,6 +24,15 @@ export default function AdminUsuarios() {
       setForm((f) => ({ ...f, [name]: value }))
     }
   }
+
+  function toggleTodos(checked) {
+    setForm((f) => ({
+      ...f,
+      modulos: checked ? MODULOS_PERMISOS.map((m) => m.key) : [],
+    }))
+  }
+
+  const todosSeleccionados = MODULOS_PERMISOS.every((m) => form.modulos.includes(m.key))
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -45,7 +53,7 @@ export default function AdminUsuarios() {
       setForm({
         cedula: '', nombre: '', telefono: '', usuario: '', password: '',
         rol: 'admin',
-        modulos: MODULOS_OPCIONES,
+        modulos: [],
       })
     } catch (err) {
       setError(err.message || 'Error al crear usuario')
@@ -57,7 +65,7 @@ export default function AdminUsuarios() {
   return (
     <div className="admin-page">
       <h1>Crear usuario admin</h1>
-      <p className="admin-welcome">Registra un nuevo usuario administrativo con cédula, nombre, teléfono, usuario y contraseña.</p>
+      <p className="admin-welcome">Registra un nuevo usuario. Seleccione los permisos (módulos) que tendrá cada usuario.</p>
       <form onSubmit={handleSubmit} className="admin-form">
         <label>
           Cédula
@@ -83,17 +91,27 @@ export default function AdminUsuarios() {
           Rol
           <input name="rol" value={form.rol} onChange={handleChange} />
         </label>
-        <div className="admin-form-modulos">
-          <span>Módulos:</span>
-          {MODULOS_OPCIONES.map((m) => (
-            <label key={m} className="admin-checkbox">
+        <div className="admin-form-modulos admin-form-modulos-grid">
+          <div className="modulos-header">
+            <span>Permisos (módulos)</span>
+            <label className="admin-checkbox">
               <input
                 type="checkbox"
-                value={m}
-                checked={form.modulos.includes(m)}
+                checked={todosSeleccionados}
+                onChange={(e) => toggleTodos(e.target.checked)}
+              />
+              Seleccionar todos
+            </label>
+          </div>
+          {MODULOS_PERMISOS.map((m) => (
+            <label key={m.key} className="admin-checkbox">
+              <input
+                type="checkbox"
+                value={m.key}
+                checked={form.modulos.includes(m.key)}
                 onChange={handleChange}
               />
-              {m}
+              {m.label}
             </label>
           ))}
         </div>

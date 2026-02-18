@@ -73,10 +73,19 @@ export function setAdminUser(user) {
 export function getAdminModulos() {
   try {
     const m = localStorage.getItem('admin_modulos')
-    return m ? JSON.parse(m) : []
+    const modulos = m ? JSON.parse(m) : []
+    return modulos
   } catch {
     return []
   }
+}
+
+/** true si el usuario tiene permiso para el módulo. Si modulos incluye "master" o "*", tiene todo. Si modulos está vacío (legacy), tiene todo. */
+export function hasModulo(modulo) {
+  const modulos = getAdminModulos()
+  if (!modulos?.length) return true
+  if (modulos.includes('master') || modulos.includes('*')) return true
+  return modulos.includes(modulo)
 }
 
 export function setAdminModulos(modulos) {
