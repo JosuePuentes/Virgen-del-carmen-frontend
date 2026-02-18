@@ -58,11 +58,29 @@ export default function AdminLayout() {
           <Link to="/admin/finanzas" className={location.pathname.startsWith('/admin/finanzas') ? 'active' : ''}>
             Finanzas
           </Link>
+          <Link to="/admin/cuentas-por-cobrar" className={location.pathname.startsWith('/admin/cuentas-por-cobrar') ? 'active' : ''}>
+            Cuentas por cobrar
+          </Link>
+          <Link to="/admin/cuentas-por-pagar" className={location.pathname.startsWith('/admin/cuentas-por-pagar') ? 'active' : ''}>
+            Cuentas por pagar
+          </Link>
+          <Link to="/admin/facturas-finalizadas" className={location.pathname.startsWith('/admin/facturas-finalizadas') ? 'active' : ''}>
+            Facturas finalizadas
+          </Link>
           <Link to="/admin/gastos" className={location.pathname.startsWith('/admin/gastos') ? 'active' : ''}>
             Gastos
           </Link>
           <Link to="/admin/cierre-diario" className={location.pathname.startsWith('/admin/cierre-diario') ? 'active' : ''}>
             Cierre diario
+          </Link>
+          <Link to="/admin/proveedores" className={location.pathname.startsWith('/admin/proveedores') ? 'active' : ''}>
+            Proveedores
+          </Link>
+          <Link to="/admin/compras" className={location.pathname.startsWith('/admin/compras') ? 'active' : ''}>
+            Compras
+          </Link>
+          <Link to="/admin/ordenes-compra" className={location.pathname.startsWith('/admin/ordenes-compra') ? 'active' : ''}>
+            Órdenes de compra
           </Link>
           {hasModulo('inventario') && (
             <Link to="/admin/inventario" className={location.pathname.startsWith('/admin/inventario') ? 'active' : ''}>

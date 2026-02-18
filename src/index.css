@@ -1505,6 +1505,18 @@ ul {
 .cierre-filtros { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
 .cierre-filtros label { display: flex; align-items: center; gap: 0.5rem; }
 
+.dias-ok { color: var(--success); font-weight: 600; }
+.dias-vencido { color: var(--error); font-weight: 600; }
+.fila-vencida { background: rgba(139, 69, 19, 0.08); }
+.admin-total { margin-bottom: 0.75rem; font-size: 1.1rem; }
+.compras-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+
+.resumen-financiero { background: var(--off-white); padding: 1rem; border-radius: 8px; }
+.resumen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+.resumen-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.resumen-item span { font-size: 0.9rem; color: var(--text-muted); }
+.resumen-utilidad { border-left: 3px solid var(--success); padding-left: 0.5rem; }
+
 @media (max-width: 900px) {
   .finanzas-grid { grid-template-columns: 1fr; }
 }

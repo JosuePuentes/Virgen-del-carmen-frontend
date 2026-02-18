@@ -25,6 +25,13 @@ import AdminControlFallas from './pages/admin/AdminControlFallas'
 import AdminFinanzas from './pages/admin/AdminFinanzas'
 import AdminGastos from './pages/admin/AdminGastos'
 import AdminCierreDiario from './pages/admin/AdminCierreDiario'
+import AdminCuentasPorCobrar from './pages/admin/AdminCuentasPorCobrar'
+import AdminCuentasPorPagar from './pages/admin/AdminCuentasPorPagar'
+import AdminFacturasFinalizadas from './pages/admin/AdminFacturasFinalizadas'
+import AdminProveedores from './pages/admin/AdminProveedores'
+import AdminCompras from './pages/admin/AdminCompras'
+import AdminOrdenesCompra from './pages/admin/AdminOrdenesCompra'
+import AdminOrdenCompraDetalle from './pages/admin/AdminOrdenCompraDetalle'
 import AdminGuard from './components/AdminGuard'
 
 function ScrollToHash() {
@@ -69,8 +76,15 @@ function AppRoutes() {
           <Route path="clientes" element={<AdminClientes />} />
           <Route path="ventas" element={<AdminVentas />} />
           <Route path="finanzas" element={<AdminFinanzas />} />
+          <Route path="cuentas-por-cobrar" element={<AdminCuentasPorCobrar />} />
+          <Route path="cuentas-por-pagar" element={<AdminCuentasPorPagar />} />
+          <Route path="facturas-finalizadas" element={<AdminFacturasFinalizadas />} />
           <Route path="gastos" element={<AdminGastos />} />
           <Route path="cierre-diario" element={<AdminCierreDiario />} />
+          <Route path="proveedores" element={<AdminProveedores />} />
+          <Route path="compras" element={<AdminCompras />} />
+          <Route path="ordenes-compra" element={<AdminOrdenesCompra />} />
+          <Route path="ordenes-compra/:id" element={<AdminOrdenCompraDetalle />} />
         </Route>
       </Routes>
     </>

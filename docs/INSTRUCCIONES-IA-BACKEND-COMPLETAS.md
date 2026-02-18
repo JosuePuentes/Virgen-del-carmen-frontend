@@ -135,17 +135,67 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 14. Dashboard finanzas
+## 14. Cuentas por cobrar
+
+- `GET /cuentas-por-cobrar/vigentes` – facturas con días de crédito restantes. Cada item: numero, cliente, rif, monto/total, fecha_emision, dias_restantes, fecha_vencimiento
+- `GET /cuentas-por-cobrar/vencidas` – facturas vencidas. Cada item: numero, cliente, rif, monto/total, fecha_vencimiento, dias_vencidos
+- `GET /cuentas-por-cobrar/total` – { total } monto total por cobrar (para dashboard finanzas)
+
+---
+
+## 15. Cuentas por pagar
+
+- `GET /cuentas-por-pagar/` – obligaciones con proveedores. Cada item: proveedor_empresa, proveedor_rif, concepto, monto, fecha_vencimiento, dias_credito
+- `GET /cuentas-por-pagar/total` – { total } monto total por pagar (para dashboard finanzas)
+
+---
+
+## 16. Facturas finalizadas
+
+- `GET /facturas/top-clientes` – top 10 mejores clientes. Cada item: cliente/empresa, rif, total, cantidad_pedidos
+- `GET /facturas/clientes-poco-frecuentes` – clientes que no compran frecuentemente. Cada item: cliente, rif, ultimo_pedido, dias_sin_comprar
+- `GET /facturas/pagadas` – facturas ya pagadas. Cada item: numero, cliente, rif, monto/total, fecha_pago
+
+---
+
+## 17. Proveedores
+
+- `GET /proveedores/` – listar proveedores
+- `POST /proveedores/` – crear con: rif, empresa, dias_credito, condiciones_comerciales (%), pronto_pago_porcentaje (%)
+- `PUT /proveedores/{id}` – actualizar
+- `DELETE /proveedores/{id}` – eliminar
+
+---
+
+## 18. Compras
+
+- `POST /compras/totalizar` – body: { proveedor_id, productos: [{ codigo, cantidad }] }. Suma cantidades al inventario directamente (sin crear orden)
+- Ver sección Órdenes de compra para generar orden
+
+---
+
+## 19. Órdenes de compra
+
+- `GET /ordenes-compra/` – listar órdenes. Cada item: _id, proveedor_empresa, proveedor_rif, total, totalizada/estado, fecha
+- `POST /ordenes-compra/` – crear orden. Body: { proveedor_id, proveedor_rif, productos: [{ codigo, descripcion, costo, cantidad }], total }
+- `GET /ordenes-compra/{id}` – detalle con productos
+- `PUT /ordenes-compra/{id}` – actualizar productos y total
+- `POST /ordenes-compra/{id}/totalizar` – marcar como totalizada y sumar cantidades al inventario
+
+---
+
+## 20. Dashboard finanzas
 
 - `GET /finanzas/resumen` – { productos_vendidos, valor_vendido, utilidad }
 - `GET /finanzas/top-productos?tipo=mas` – top 10 más vendidos
 - `GET /finanzas/top-productos?tipo=menos` – top 10 menos vendidos
 - `GET /finanzas/graficas` – array de { mes, valor } por mes
 - `GET /finanzas/gastos` – { total } o número con total de gastos
+- El dashboard también llama a `cuentas-por-cobrar/total` y `cuentas-por-pagar/total` para el resumen financiero
 
 ---
 
-## 15. Gastos
+## 21. Gastos
 
 - `POST /gastos/` – registrar gasto (monto, descripcion, fecha, categoria)
 - `GET /gastos/?desde=YYYY-MM-DD&hasta=YYYY-MM-DD` – listar con filtros por fecha
@@ -153,7 +203,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 16. Cierre diario
+## 22. Cierre diario
 
 - `GET /cierre-diario/?fecha=YYYY-MM-DD` – resumen del día
 - `GET /cierre-diario/?desde=YYYY-MM-DD&hasta=YYYY-MM-DD` – rango de fechas
@@ -178,6 +228,12 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 | Finanzas | Resumen, top productos, gráficas |
 | Gastos | CRUD gastos |
 | Cierre diario | Resumen por fecha/rango |
+| Cuentas por cobrar | Facturas vigentes, vencidas, total |
+| Cuentas por pagar | Obligaciones con proveedores |
+| Facturas finalizadas | Top clientes, poco frecuentes, pagadas |
+| Proveedores | CRUD con RIF, días crédito, condiciones %, pronto pago % |
+| Compras | Totalizar directo o generar orden |
+| Órdenes de compra | CRUD, editar, totalizar (suma a inventario) |
 
 ---
 
