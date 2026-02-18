@@ -132,6 +132,37 @@ export async function loginCliente(email, password) {
   return { ok: false, error: data.detail || data.message || 'Error al iniciar sesión' }
 }
 
+/**
+ * Login unificado: intenta cliente primero, luego admin.
+ * El backend identifica si es cliente (email) o admin (usuario).
+ * Devuelve { ok, data, rol: 'client'|'admin', error }
+ */
+export async function loginUnificado(identificador, password) {
+  const resCliente = await fetch(getApiUrl('login/'), {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ email: identificador, password }),
+  })
+  const dataCliente = await resCliente.json().catch(() => ({}))
+  if (resCliente.ok && dataCliente.access_token) {
+    return { ok: true, data: dataCliente, rol: 'client' }
+  }
+  if (resCliente.status === 403) {
+    const msg = Array.isArray(dataCliente.detail) ? dataCliente.detail[0]?.msg || dataCliente.detail[0] : dataCliente.detail || 'Acceso denegado'
+    return { ok: false, error: typeof msg === 'string' ? msg : JSON.stringify(msg) }
+  }
+  const resAdmin = await fetch(getApiUrl('login/admin/'), {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ usuario: identificador, password }),
+  })
+  const dataAdmin = await resAdmin.json().catch(() => ({}))
+  if (resAdmin.ok && dataAdmin.access_token) {
+    return { ok: true, data: dataAdmin, rol: 'admin' }
+  }
+  return { ok: false, error: dataAdmin.detail || dataCliente.detail || 'Usuario o contraseña incorrectos' }
+}
+
 export async function apiPut(path, body, token = null) {
   const url = getApiUrl(path)
   const res = await fetch(url, {
