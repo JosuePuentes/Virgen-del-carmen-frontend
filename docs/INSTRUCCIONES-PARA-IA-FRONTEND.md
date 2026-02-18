@@ -93,7 +93,7 @@ Siempre leer `detail` del JSON de error para mostrar el mensaje correcto.
 - **role** siempre es `"admin"` en login admin. Usar `role === "admin"` para redirigir al panel administrativo.
 - **modulos** define qué secciones del menú mostrar (ver tabla más abajo).
 - **rol** y **usuario** pueden usarse para mostrar nombre o rol en la cabecera.
-- Si **rol** es `"master"`, el usuario tiene acceso a todos los módulos.
+- Si **rol** es `"master"`, o **modulos** incluye `"master"` o `"*"`, o **modulos** está vacío, o el usuario tiene los 4 módulos básicos (solicitudes_clientes, pedidos, inventario, clientes), el frontend le da acceso a **todos** los módulos.
 
 **Respuestas de error:**
 

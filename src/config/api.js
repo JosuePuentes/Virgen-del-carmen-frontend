@@ -80,10 +80,10 @@ export function getAdminModulos() {
   }
 }
 
-/** true si el usuario tiene permiso para el módulo. Si modulos incluye "master" o "*", tiene todo. Si modulos está vacío (legacy), tiene todo. */
+/** true si el usuario tiene permiso para el módulo. Si modulos incluye "master" o "*", tiene todo. Si modulos está vacío (legacy/backend sin permisos), tiene todo. */
 export function hasModulo(modulo) {
   const modulos = getAdminModulos()
-  if (!modulos?.length) return true
+  if (!modulos || modulos.length === 0) return true
   if (modulos.includes('master') || modulos.includes('*')) return true
   return modulos.includes(modulo)
 }

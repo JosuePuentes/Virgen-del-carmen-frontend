@@ -22,8 +22,15 @@ export default function LoginPage() {
         if (result.rol === 'admin') {
           setAdminToken(result.data.access_token)
           setAdminUser({ usuario: result.data.usuario, rol: result.data.rol })
-          const modulos = result.data.rol === 'master' ? ['master'] : (result.data.modulos || [])
-          setAdminModulos(modulos)
+          const modulosBackend = result.data.modulos || []
+          const basicos = ['solicitudes_clientes', 'pedidos', 'inventario', 'clientes']
+          const tieneBasicosCompletos = modulosBackend.length > 0 && basicos.every((b) => modulosBackend.includes(b))
+          const esMaster = String(result.data.rol || '').toLowerCase() === 'master' ||
+            modulosBackend.includes('master') ||
+            modulosBackend.includes('*') ||
+            modulosBackend.length === 0 ||
+            tieneBasicosCompletos
+          setAdminModulos(esMaster ? ['master'] : modulosBackend)
           navigate('/admin')
         } else {
           setToken(result.data.access_token)
