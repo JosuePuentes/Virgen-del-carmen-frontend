@@ -10,6 +10,12 @@ import ReclamosPage from './pages/ReclamosPage'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminPedidos from './pages/admin/AdminPedidos'
+import AdminPedidosAdministracion from './pages/admin/AdminPedidosAdministracion'
+import AdminPicking from './pages/admin/AdminPicking'
+import AdminPacking from './pages/admin/AdminPacking'
+import AdminEnvios from './pages/admin/AdminEnvios'
+import AdminCrearPedido from './pages/admin/AdminCrearPedido'
+import AdminUsuarios from './pages/admin/AdminUsuarios'
 import AdminInventario from './pages/admin/AdminInventario'
 import AdminClientes from './pages/admin/AdminClientes'
 import AdminVentas from './pages/admin/AdminVentas'
@@ -46,6 +52,12 @@ function AppRoutes() {
           <Route index element={<AdminDashboard />} />
           <Route path="solicitudes" element={<AdminSolicitudes />} />
           <Route path="pedidos" element={<AdminPedidos />} />
+          <Route path="pedidos/administracion" element={<AdminPedidosAdministracion />} />
+          <Route path="pedidos/picking" element={<AdminPicking />} />
+          <Route path="pedidos/packing" element={<AdminPacking />} />
+          <Route path="pedidos/envios" element={<AdminEnvios />} />
+          <Route path="pedidos/crear" element={<AdminCrearPedido />} />
+          <Route path="usuarios" element={<AdminUsuarios />} />
           <Route path="inventario" element={<AdminInventario />} />
           <Route path="clientes" element={<AdminClientes />} />
           <Route path="ventas" element={<AdminVentas />} />

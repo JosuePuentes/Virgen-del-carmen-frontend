@@ -1121,6 +1121,91 @@ ul {
   margin: 0;
 }
 
+.admin-dashboard-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.admin-stat-card {
+  padding: 1rem 1.5rem;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 140px;
+  transition: border-color 0.2s;
+}
+
+.admin-stat-card:hover {
+  border-color: var(--ocre);
+}
+
+.admin-stat-num {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ocre);
+}
+
+.admin-form {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 500;
+}
+
+.admin-form input,
+.admin-form textarea {
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.admin-form-modulos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.admin-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.admin-section {
+  margin-bottom: 2rem;
+}
+
+.admin-section h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem;
+  color: var(--dark);
+}
+
+.admin-form-inline {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  max-width: 100%;
+}
+
 .admin-acciones {
   display: flex;
   gap: 0.5rem;

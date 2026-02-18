@@ -1,14 +1,16 @@
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
-import { getAdminUser, logoutAdmin } from '../../config/api'
+import { getAdminUser, getAdminModulos, logoutAdmin } from '../../config/api'
 
 export default function AdminLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const user = getAdminUser()
+  const modulos = getAdminModulos()
+  const hasModulo = (m) => !modulos?.length || modulos.includes(m)
 
   function handleLogout() {
     logoutAdmin()
-    navigate('/admin/login')
+    navigate('/login')
     window.location.reload()
   }
 
@@ -21,22 +23,44 @@ export default function AdminLayout() {
         </div>
         <nav className="admin-nav">
           <Link to="/admin" className={location.pathname === '/admin' ? 'active' : ''}>
-            Inicio
+            Dashboard
           </Link>
-          <Link to="/admin/solicitudes" className={location.pathname.startsWith('/admin/solicitudes') ? 'active' : ''}>
-            Solicitudes
-          </Link>
-          <Link to="/admin/pedidos" className={location.pathname.startsWith('/admin/pedidos') ? 'active' : ''}>
-            Pedidos
-          </Link>
-          <Link to="/admin/inventario" className={location.pathname.startsWith('/admin/inventario') ? 'active' : ''}>
-            Inventario
-          </Link>
-          <Link to="/admin/clientes" className={location.pathname.startsWith('/admin/clientes') ? 'active' : ''}>
-            Clientes
-          </Link>
-          <Link to="/admin/ventas" className={location.pathname.startsWith('/admin/ventas') ? 'active' : ''}>
-            Punto de venta
+          {hasModulo('solicitudes_clientes') && (
+            <Link to="/admin/solicitudes" className={location.pathname.startsWith('/admin/solicitudes') ? 'active' : ''}>
+              Solicitudes
+            </Link>
+          )}
+          {hasModulo('pedidos') && (
+            <>
+              <Link to="/admin/pedidos/administracion" className={location.pathname.includes('/pedidos/administracion') ? 'active' : ''}>
+                Pedidos – Admin
+              </Link>
+              <Link to="/admin/pedidos/picking" className={location.pathname.includes('/pedidos/picking') ? 'active' : ''}>
+                Picking
+              </Link>
+              <Link to="/admin/pedidos/packing" className={location.pathname.includes('/pedidos/packing') ? 'active' : ''}>
+                Packing
+              </Link>
+              <Link to="/admin/pedidos/envios" className={location.pathname.includes('/pedidos/envios') ? 'active' : ''}>
+                Envíos
+              </Link>
+              <Link to="/admin/pedidos/crear" className={location.pathname.includes('/pedidos/crear') ? 'active' : ''}>
+                Crear pedido
+              </Link>
+            </>
+          )}
+          {hasModulo('inventario') && (
+            <Link to="/admin/inventario" className={location.pathname.startsWith('/admin/inventario') ? 'active' : ''}>
+              Inventario
+            </Link>
+          )}
+          {hasModulo('clientes') && (
+            <Link to="/admin/clientes" className={location.pathname.startsWith('/admin/clientes') ? 'active' : ''}>
+              Clientes
+            </Link>
+          )}
+          <Link to="/admin/usuarios" className={location.pathname.startsWith('/admin/usuarios') ? 'active' : ''}>
+            Usuarios
           </Link>
         </nav>
         <div className="admin-sidebar-footer">
