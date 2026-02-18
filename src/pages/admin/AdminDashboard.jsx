@@ -53,13 +53,13 @@ export default function AdminDashboard() {
       <div className="dashboard-bcv-card">
         <h3>💵 Tasa BCV (Dólar)</h3>
         <div className="dashboard-bcv-valor">
-          <span className="bcv-actual">1 USD = Bs. {bcv.toFixed(2)}</span>
+          <span className="bcv-actual">1 USD = Bs. {bcv.toFixed(4)}</span>
           <div className="bcv-editar">
             <input
               type="number"
-              step="0.01"
-              min="0.01"
-              placeholder={bcv.toFixed(2)}
+              step="0.0001"
+              min="0.0001"
+              placeholder={bcv.toFixed(4)}
               value={bcvEdit}
               onChange={(e) => setBcvEdit(e.target.value)}
               onBlur={async () => {

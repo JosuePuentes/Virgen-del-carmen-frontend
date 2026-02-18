@@ -10,6 +10,7 @@ export default function AdminClientes() {
   const [exito, setExito] = useState('')
   const [form, setForm] = useState({
     rif: '', empresa: '', encargado: '', direccion: '', telefono: '',
+    email: '', password: '',
     dias_credito: 0, limite_credito: 0,
   })
 
@@ -46,11 +47,13 @@ export default function AdminClientes() {
         encargado: form.encargado,
         direccion: form.direccion,
         telefono: form.telefono,
+        email: form.email.trim() || undefined,
+        password: form.password || undefined,
         dias_credito: form.dias_credito || 0,
         limite_credito: form.limite_credito || 0,
       }, getAdminToken())
-      setExito('Cliente creado. El backend generará email y contraseña automáticamente.')
-      setForm({ rif: '', empresa: '', encargado: '', direccion: '', telefono: '', dias_credito: 0, limite_credito: 0 })
+      setExito('Cliente creado. El cliente puede iniciar sesión con el correo y contraseña indicados.')
+      setForm({ rif: '', empresa: '', encargado: '', direccion: '', telefono: '', email: '', password: '', dias_credito: 0, limite_credito: 0 })
       await cargar()
     } catch (err) {
       setError(err.message || 'Error al crear cliente')
@@ -62,7 +65,7 @@ export default function AdminClientes() {
   return (
     <div className="admin-page">
       <h1>Clientes</h1>
-      <p className="admin-welcome">Crear cliente con RIF, empresa, encargado, teléfono, días de crédito y límite de crédito. Al crear, el backend genera email y contraseña.</p>
+      <p className="admin-welcome">Crear cliente con RIF, empresa, encargado, correo, contraseña, teléfono, días de crédito y límite de crédito. El correo y contraseña serán el usuario para acceso del cliente.</p>
       {error && <p className="auth-error">{error}</p>}
       {exito && <p className="auth-success">{exito}</p>}
 
@@ -72,6 +75,8 @@ export default function AdminClientes() {
           <input name="rif" placeholder="RIF" value={form.rif} onChange={handleChange} required />
           <input name="empresa" placeholder="Empresa" value={form.empresa} onChange={handleChange} required />
           <input name="encargado" placeholder="Encargado" value={form.encargado} onChange={handleChange} />
+          <input name="email" type="email" placeholder="Correo (usuario)" value={form.email} onChange={handleChange} required />
+          <input name="password" type="password" placeholder="Contraseña" value={form.password} onChange={handleChange} required autoComplete="new-password" />
           <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
           <input name="direccion" placeholder="Dirección" value={form.direccion} onChange={handleChange} />
           <input name="dias_credito" type="number" placeholder="Días de crédito" value={form.dias_credito || ''} onChange={handleChange} />
@@ -95,6 +100,7 @@ export default function AdminClientes() {
                   <th>RIF</th>
                   <th>Empresa</th>
                   <th>Encargado</th>
+                  <th>Correo</th>
                   <th>Teléfono</th>
                   <th>Días crédito</th>
                   <th>Límite crédito</th>
@@ -106,6 +112,7 @@ export default function AdminClientes() {
                     <td>{c.rif || '—'}</td>
                     <td>{c.empresa || '—'}</td>
                     <td>{c.encargado || '—'}</td>
+                    <td>{c.email || '—'}</td>
                     <td>{c.telefono || '—'}</td>
                     <td>{c.dias_credito ?? '—'}</td>
                     <td><Precio value={c.limite_credito} /></td>

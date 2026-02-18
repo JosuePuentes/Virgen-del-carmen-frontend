@@ -60,7 +60,7 @@ export default function AdminLayout() {
         <div className="admin-sidebar-header">
           <span className="admin-logo">⚕</span>
           <span>Panel Admin</span>
-          <span className="admin-bcv-badge" title="Tasa BCV">$ = Bs. {bcv.toFixed(2)}</span>
+          <span className="admin-bcv-badge" title="Tasa BCV">$ = Bs. {bcv.toFixed(4)}</span>
         </div>
         <div className="admin-sidebar-search">
           <input

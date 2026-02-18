@@ -14,8 +14,8 @@ El frontend Virgen del Carmen necesita un backend que soporte toda la lógica de
 
 ## 0. Tasa BCV (control cambiario)
 
-- `GET /bcv/` – devuelve la tasa actual del dólar BCV. Respuesta: `{ "tasa": number }` o `{ "rate": number }`. Puede ser público (sin auth) para que el catálogo y clientes vean precios.
-- `PUT /bcv/` – actualiza la tasa. Body: `{ "tasa": number }`. Requiere token admin.
+- `GET /bcv/` – devuelve la tasa actual del dólar BCV. Respuesta: `{ "tasa": number }` (4 decimales, sin redondear). Puede ser público (sin auth).
+- `PUT /bcv/` – actualiza la tasa. Body: `{ "tasa": number }` (4 decimales). Requiere token admin.
 
 ---
 
@@ -131,8 +131,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 ## 12. Clientes (admin)
 
 - `GET /clientes/all` – todos los clientes
-- `POST /clientes/` – crear con: rif, empresa, encargado, telefono, dias_credito, limite_credito
-- Al crear: generar **email** y **password** que serán las credenciales del cliente
+- `POST /clientes/` – crear con: rif, empresa, encargado, email, password, telefono, direccion, dias_credito, limite_credito. El email y password son el usuario para acceso del cliente (si no se envían, el backend puede generarlos).
 - `PATCH /clientes/{rif}` – editar
 - `GET /clientes/{rif}` – detalle con limite_credito, limite_consumido, facturas_vencidas
 
