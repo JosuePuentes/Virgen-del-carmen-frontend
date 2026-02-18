@@ -6,6 +6,12 @@ export default function AdminSolicitudes() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [accionando, setAccionando] = useState(null)
+  const [modalAprobar, setModalAprobar] = useState(null)
+  const [formAprobar, setFormAprobar] = useState({
+    limite_credito: '',
+    dias_credito: '',
+    monto: '',
+  })
 
   async function cargar() {
     setLoading(true)
@@ -21,14 +27,24 @@ export default function AdminSolicitudes() {
     }
   }
 
-  useEffect(() => {
-    cargar()
-  }, [])
+  useEffect(() => { cargar() }, [])
 
-  async function handleAprobar(rif) {
-    setAccionando(rif)
+  function abrirAprobar(s) {
+    setModalAprobar(s)
+    setFormAprobar({ limite_credito: '', dias_credito: '', monto: '' })
+  }
+
+  async function handleAprobar(e) {
+    e.preventDefault()
+    if (!modalAprobar) return
+    setAccionando(modalAprobar.rif)
     try {
-      await apiPatch(`clientes/${rif}/aprobar`, {}, getAdminToken())
+      await apiPatch(`clientes/${modalAprobar.rif}/aprobar`, {
+        limite_credito: Number(formAprobar.limite_credito) || 0,
+        dias_credito: Number(formAprobar.dias_credito) || 0,
+        monto: Number(formAprobar.monto) || 0,
+      }, getAdminToken())
+      setModalAprobar(null)
       await cargar()
     } catch (err) {
       setError(err.message || 'Error al aprobar')
@@ -52,7 +68,8 @@ export default function AdminSolicitudes() {
   return (
     <div className="admin-page">
       <h1>Solicitudes de nuevos clientes</h1>
-      {loading && <p className="catalogo-loading">Cargando solicitudes...</p>}
+      <p className="admin-welcome">Cuando un cliente se registra, su solicitud aparece aquí. Al aprobar, complete límite de crédito y días.</p>
+      {loading && <p className="catalogo-loading">Cargando...</p>}
       {error && <p className="auth-error">{error}</p>}
       {!loading && !error && (
         <div className="admin-table-wrap">
@@ -67,7 +84,6 @@ export default function AdminSolicitudes() {
                   <th>Teléfono</th>
                   <th>Encargado</th>
                   <th>Email</th>
-                  <th>Dirección</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -79,23 +95,12 @@ export default function AdminSolicitudes() {
                     <td>{s.telefono || '—'}</td>
                     <td>{s.encargado || '—'}</td>
                     <td>{s.email || '—'}</td>
-                    <td>{s.direccion || '—'}</td>
                     <td>
                       <div className="admin-acciones">
-                        <button
-                          type="button"
-                          className="btn-aprobar"
-                          onClick={() => handleAprobar(s.rif)}
-                          disabled={accionando === s.rif}
-                        >
-                          {accionando === s.rif ? '…' : 'Aprobar'}
+                        <button type="button" className="btn-aprobar" onClick={() => abrirAprobar(s)} disabled={!!accionando}>
+                          Aprobar
                         </button>
-                        <button
-                          type="button"
-                          className="btn-rechazar"
-                          onClick={() => handleRechazar(s.rif)}
-                          disabled={accionando === s.rif}
-                        >
+                        <button type="button" className="btn-rechazar" onClick={() => handleRechazar(s.rif)} disabled={!!accionando}>
                           Rechazar
                         </button>
                       </div>
@@ -105,6 +110,32 @@ export default function AdminSolicitudes() {
               </tbody>
             </table>
           )}
+        </div>
+      )}
+
+      {modalAprobar && (
+        <div className="modal-overlay" onClick={() => setModalAprobar(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Aprobar cliente: {modalAprobar.empresa || modalAprobar.rif}</h3>
+            <form onSubmit={handleAprobar}>
+              <label>
+                Límite de crédito (Bs.)
+                <input type="number" step="0.01" value={formAprobar.limite_credito} onChange={(e) => setFormAprobar((f) => ({ ...f, limite_credito: e.target.value }))} required />
+              </label>
+              <label>
+                Días de crédito
+                <input type="number" value={formAprobar.dias_credito} onChange={(e) => setFormAprobar((f) => ({ ...f, dias_credito: e.target.value }))} required />
+              </label>
+              <label>
+                Monto inicial
+                <input type="number" step="0.01" value={formAprobar.monto} onChange={(e) => setFormAprobar((f) => ({ ...f, monto: e.target.value }))} />
+              </label>
+              <div className="modal-actions">
+                <button type="button" className="btn-secondary" onClick={() => setModalAprobar(null)}>Cancelar</button>
+                <button type="submit" className="btn-hero" disabled={!!accionando}>{accionando ? '…' : 'Aprobar'}</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

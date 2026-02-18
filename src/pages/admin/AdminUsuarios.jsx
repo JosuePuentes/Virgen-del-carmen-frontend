@@ -5,8 +5,7 @@ const MODULOS_OPCIONES = ['solicitudes_clientes', 'pedidos', 'inventario', 'clie
 
 export default function AdminUsuarios() {
   const [form, setForm] = useState({
-    usuario: '',
-    password: '',
+    cedula: '', nombre: '', telefono: '', usuario: '', password: '',
     rol: 'admin',
     modulos: ['solicitudes_clientes', 'pedidos', 'inventario', 'clientes'],
   })
@@ -33,9 +32,21 @@ export default function AdminUsuarios() {
     setExito('')
     setLoading(true)
     try {
-      await apiPost('register/admin/', form, getAdminToken())
+      await apiPost('register/admin/', {
+        cedula: form.cedula,
+        nombre: form.nombre,
+        telefono: form.telefono,
+        usuario: form.usuario,
+        password: form.password,
+        rol: form.rol,
+        modulos: form.modulos,
+      }, getAdminToken())
       setExito('Usuario administrativo creado correctamente.')
-      setForm({ usuario: '', password: '', rol: 'admin', modulos: MODULOS_OPCIONES })
+      setForm({
+        cedula: '', nombre: '', telefono: '', usuario: '', password: '',
+        rol: 'admin',
+        modulos: MODULOS_OPCIONES,
+      })
     } catch (err) {
       setError(err.message || 'Error al crear usuario')
     } finally {
@@ -46,8 +57,20 @@ export default function AdminUsuarios() {
   return (
     <div className="admin-page">
       <h1>Crear usuario admin</h1>
-      <p className="admin-welcome">Registra un nuevo usuario administrativo.</p>
+      <p className="admin-welcome">Registra un nuevo usuario administrativo con cédula, nombre, teléfono, usuario y contraseña.</p>
       <form onSubmit={handleSubmit} className="admin-form">
+        <label>
+          Cédula
+          <input name="cedula" value={form.cedula} onChange={handleChange} placeholder="V-12345678" />
+        </label>
+        <label>
+          Nombre
+          <input name="nombre" value={form.nombre} onChange={handleChange} required />
+        </label>
+        <label>
+          Teléfono
+          <input name="telefono" value={form.telefono} onChange={handleChange} placeholder="04141234567" />
+        </label>
         <label>
           Usuario
           <input name="usuario" value={form.usuario} onChange={handleChange} required />

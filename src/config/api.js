@@ -194,3 +194,17 @@ export async function apiDelete(path, token = null) {
   if (!res.ok) throw new Error(await res.text().catch(() => res.statusText))
   return res.json().catch(() => ({}))
 }
+
+/** POST con FormData (archivos). No incluye Content-Type para que el navegador lo establezca con boundary. */
+export async function apiPostForm(path, formData, token = null) {
+  const url = getApiUrl(path)
+  const headers = {}
+  if (token ?? getToken()) headers['Authorization'] = `Bearer ${token ?? getToken()}`
+  const res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: formData,
+  })
+  if (!res.ok) throw new Error(await res.text().catch(() => res.statusText))
+  return res.json().catch(() => ({}))
+}

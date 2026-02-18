@@ -47,8 +47,23 @@ export default function AdminLayout() {
               <Link to="/admin/pedidos/crear" className={location.pathname.includes('/pedidos/crear') ? 'active' : ''}>
                 Crear pedido
               </Link>
+              <Link to="/admin/pedidos/facturacion" className={location.pathname.includes('/pedidos/facturacion') ? 'active' : ''}>
+                Facturación
+              </Link>
+              <Link to="/admin/pedidos/fallas" className={location.pathname.includes('/pedidos/fallas') ? 'active' : ''}>
+                Control fallas
+              </Link>
             </>
           )}
+          <Link to="/admin/finanzas" className={location.pathname.startsWith('/admin/finanzas') ? 'active' : ''}>
+            Finanzas
+          </Link>
+          <Link to="/admin/gastos" className={location.pathname.startsWith('/admin/gastos') ? 'active' : ''}>
+            Gastos
+          </Link>
+          <Link to="/admin/cierre-diario" className={location.pathname.startsWith('/admin/cierre-diario') ? 'active' : ''}>
+            Cierre diario
+          </Link>
           {hasModulo('inventario') && (
             <Link to="/admin/inventario" className={location.pathname.startsWith('/admin/inventario') ? 'active' : ''}>
               Inventario

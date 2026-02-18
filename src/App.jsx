@@ -20,6 +20,11 @@ import AdminInventario from './pages/admin/AdminInventario'
 import AdminClientes from './pages/admin/AdminClientes'
 import AdminVentas from './pages/admin/AdminVentas'
 import AdminSolicitudes from './pages/admin/AdminSolicitudes'
+import AdminFacturacion from './pages/admin/AdminFacturacion'
+import AdminControlFallas from './pages/admin/AdminControlFallas'
+import AdminFinanzas from './pages/admin/AdminFinanzas'
+import AdminGastos from './pages/admin/AdminGastos'
+import AdminCierreDiario from './pages/admin/AdminCierreDiario'
 import AdminGuard from './components/AdminGuard'
 
 function ScrollToHash() {
@@ -57,10 +62,15 @@ function AppRoutes() {
           <Route path="pedidos/packing" element={<AdminPacking />} />
           <Route path="pedidos/envios" element={<AdminEnvios />} />
           <Route path="pedidos/crear" element={<AdminCrearPedido />} />
+          <Route path="pedidos/facturacion" element={<AdminFacturacion />} />
+          <Route path="pedidos/fallas" element={<AdminControlFallas />} />
           <Route path="usuarios" element={<AdminUsuarios />} />
           <Route path="inventario" element={<AdminInventario />} />
           <Route path="clientes" element={<AdminClientes />} />
           <Route path="ventas" element={<AdminVentas />} />
+          <Route path="finanzas" element={<AdminFinanzas />} />
+          <Route path="gastos" element={<AdminGastos />} />
+          <Route path="cierre-diario" element={<AdminCierreDiario />} />
         </Route>
       </Routes>
     </>

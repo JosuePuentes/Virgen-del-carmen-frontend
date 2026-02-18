@@ -2,10 +2,16 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { apiGet, getAdminToken, getAdminModulos } from '../../config/api'
 
+const ESTADOS = [
+  { key: 'nuevo', label: 'En espera', ruta: 'administracion' },
+  { key: 'picking', label: 'Picking', ruta: 'picking' },
+  { key: 'packing', label: 'Packing', ruta: 'packing' },
+  { key: 'enviado', label: 'Enviados', ruta: 'envios' },
+  { key: 'entregado', label: 'Entregados', ruta: 'envios' },
+]
+
 export default function AdminDashboard() {
-  const [solicitudes, setSolicitudes] = useState(0)
-  const [pedidosAdmin, setPedidosAdmin] = useState(0)
-  const [pedidosPicking, setPedidosPicking] = useState(0)
+  const [pedidosPorEstado, setPedidosPorEstado] = useState({})
   const [loading, setLoading] = useState(true)
   const modulos = getAdminModulos()
   const hasModulo = (m) => !modulos?.length || modulos.includes(m)
@@ -15,18 +21,20 @@ export default function AdminDashboard() {
       setLoading(true)
       try {
         const token = getAdminToken()
-        const [sol, admin, picking] = await Promise.all([
-          apiGet('clientes/solicitudes/pendientes', token).catch(() => []),
-          apiGet('pedidos/administracion/', token).catch(() => []),
-          apiGet('pedidos/picking/', token).catch(() => []),
-        ])
-        setSolicitudes(Array.isArray(sol) ? sol.length : sol?.length ?? 0)
-        setPedidosAdmin(Array.isArray(admin) ? admin.length : admin?.length ?? 0)
-        setPedidosPicking(Array.isArray(picking) ? picking.length : picking?.length ?? 0)
+        const resultados = {}
+        for (const e of ESTADOS) {
+          try {
+            const data = e.key === 'nuevo'
+              ? await apiGet('pedidos/administracion/', token)
+              : await apiGet(`pedidos/por_estado/${e.key}`, token)
+            resultados[e.key] = Array.isArray(data) ? data : data?.pedidos || data?.items || []
+          } catch {
+            resultados[e.key] = []
+          }
+        }
+        setPedidosPorEstado(resultados)
       } catch {
-        setSolicitudes(0)
-        setPedidosAdmin(0)
-        setPedidosPicking(0)
+        setPedidosPorEstado({})
       } finally {
         setLoading(false)
       }
@@ -37,29 +45,38 @@ export default function AdminDashboard() {
   return (
     <div className="admin-dashboard">
       <h1>Dashboard</h1>
-      <p className="admin-welcome">Resumen del panel.</p>
+      <p className="admin-welcome">Historial de pedidos por estado.</p>
       {loading ? (
         <p className="catalogo-loading">Cargando...</p>
       ) : (
-        <div className="admin-dashboard-stats">
-          {hasModulo('solicitudes_clientes') && (
-            <Link to="/admin/solicitudes" className="admin-stat-card">
-              <span className="admin-stat-num">{solicitudes}</span>
-              <span>Solicitudes pendientes</span>
-            </Link>
-          )}
-          {hasModulo('pedidos') && (
-            <>
-              <Link to="/admin/pedidos/administracion" className="admin-stat-card">
-                <span className="admin-stat-num">{pedidosAdmin}</span>
-                <span>Pedidos por validar</span>
-              </Link>
-              <Link to="/admin/pedidos/picking" className="admin-stat-card">
-                <span className="admin-stat-num">{pedidosPicking}</span>
-                <span>En picking</span>
-              </Link>
-            </>
-          )}
+        <div className="dashboard-estados">
+          {ESTADOS.filter((e) => e.key !== 'nuevo' || hasModulo('pedidos')).map((e) => {
+            const lista = pedidosPorEstado[e.key] || []
+            return (
+              <section key={e.key} className="dashboard-estado-card">
+                <h3>
+                  {e.label} ({lista.length})
+                  {hasModulo('pedidos') && (
+                    <Link to={`/admin/pedidos/${e.ruta}`} className="dashboard-link">Ver</Link>
+                  )}
+                </h3>
+                <div className="dashboard-lista">
+                  {lista.length === 0 ? (
+                    <p className="catalogo-empty">Ninguno</p>
+                  ) : (
+                    lista.slice(0, 5).map((p) => (
+                      <div key={p._id || p.id} className="dashboard-pedido-item">
+                        <span className="pedido-id">#{String(p._id || p.id).slice(-6)}</span>
+                        <span>{p.cliente || p.rif || '—'}</span>
+                        <span>Bs. {typeof p.total === 'number' ? p.total.toFixed(2) : p.total || '—'}</span>
+                      </div>
+                    ))
+                  )}
+                  {lista.length > 5 && <p className="dashboard-more">+{lista.length - 5} más</p>}
+                </div>
+              </section>
+            )
+          })}
         </div>
       )}
       <div className="admin-cards">
@@ -74,8 +91,8 @@ export default function AdminDashboard() {
           <>
             <Link to="/admin/pedidos/administracion" className="admin-card">
               <span className="admin-card-icon">📦</span>
-              <h3>Pedidos – Admin</h3>
-              <p>Validar y enviar a picking</p>
+              <h3>Validación</h3>
+              <p>Pedidos por validar</p>
             </Link>
             <Link to="/admin/pedidos/crear" className="admin-card">
               <span className="admin-card-icon">➕</span>
@@ -88,20 +105,35 @@ export default function AdminDashboard() {
           <Link to="/admin/inventario" className="admin-card">
             <span className="admin-card-icon">📋</span>
             <h3>Inventario</h3>
-            <p>Productos y existencias</p>
+            <p>Productos y cargas</p>
           </Link>
         )}
         {hasModulo('clientes') && (
           <Link to="/admin/clientes" className="admin-card">
             <span className="admin-card-icon">👥</span>
             <h3>Clientes</h3>
-            <p>Listar, crear y editar</p>
+            <p>Listar y crear</p>
           </Link>
         )}
         <Link to="/admin/usuarios" className="admin-card">
           <span className="admin-card-icon">👤</span>
           <h3>Usuarios</h3>
           <p>Crear usuario admin</p>
+        </Link>
+        <Link to="/admin/finanzas" className="admin-card">
+          <span className="admin-card-icon">💰</span>
+          <h3>Finanzas</h3>
+          <p>Ventas y utilidad</p>
+        </Link>
+        <Link to="/admin/gastos" className="admin-card">
+          <span className="admin-card-icon">📉</span>
+          <h3>Gastos</h3>
+          <p>Registrar gastos</p>
+        </Link>
+        <Link to="/admin/cierre" className="admin-card">
+          <span className="admin-card-icon">📊</span>
+          <h3>Cierre diario</h3>
+          <p>Resumen por fechas</p>
         </Link>
       </div>
     </div>
