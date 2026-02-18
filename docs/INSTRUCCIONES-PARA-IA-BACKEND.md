@@ -15,7 +15,8 @@ El frontend **Virgen del Carmen** (Vite + React) está conectado a tu backend Fa
 2. **CORS**: Asegurar que el backend permita peticiones desde el dominio del frontend en Vercel (ej: `https://virgen-del-carmen-frontend.vercel.app`) y desde `localhost` en desarrollo.
 
 3. **Rutas que usa el frontend actualmente:**
-   - `POST /login/` — Login cliente
+   - `POST /login/` — Login cliente (email + password)
+   - `POST /login/admin/` — Login admin (usuario + password)
    - `POST /register/` — Registro cliente
    - `POST /contacto` — Formulario de contacto
    - `POST /api/chat` — Chatbot
@@ -23,13 +24,27 @@ El frontend **Virgen del Carmen** (Vite + React) está conectado a tu backend Fa
    - `GET /pedidos/por_cliente/{rif}` — Pedidos del cliente
    - `POST /reclamos/cliente` — Crear reclamo
    - `GET /reclamos/cliente/{rif}` — Listar reclamos del cliente
+   - `GET /clientes/solicitudes/pendientes` — Solicitudes pendientes (token admin)
+   - `PATCH /clientes/{rif}/aprobar` — Aprobar cliente (token admin)
+   - `PATCH /clientes/{rif}/rechazar` — Rechazar cliente (token admin)
+   - `GET /obtener_pedidos/` — Listar pedidos (token admin)
+   - `GET /clientes/` — Listar clientes (token admin)
+   - `GET /punto-venta/ventas` — Listar ventas (token admin)
 
-4. **Formato de respuestas:**
-   - Login: `{ "access_token": "...", "rif": "...", "role": "client", ... }`
+4. **Login unificado:**
+   - El frontend tiene una sola página `/login` con pestañas Cliente vs Administrador.
+   - Cliente: email + password → `/login/` → redirige a área cliente.
+   - Admin: usuario + password → `/login/admin/` → redirige a `/admin`.
+   - Al crear usuarios en el backend, marcar si es admin o cliente.
+   - Si login cliente devuelve 403: `detail` puede ser "Pendiente de aprobación..." o "Solicitud rechazada...".
+
+5. **Formato de respuestas:**
+   - Login cliente: `{ "access_token": "...", "rif": "...", "role": "client" }`
+   - Login admin: `{ "access_token": "...", "usuario": "...", "modulos": [] }`
    - Errores: usar `detail` (string o lista) para mensajes
    - IDs de MongoDB: devolver `_id` como string
 
-5. **Al añadir o cambiar rutas:** Actualizar `BACKEND-ESTADO-PARA-FRONTEND.md` y avisar que el frontend puede necesitar adaptarse.
+6. **Al añadir o cambiar rutas:** Actualizar `BACKEND-ESTADO-PARA-FRONTEND.md` y avisar que el frontend puede necesitar adaptarse.
 
 ## Referencia rápida
 
