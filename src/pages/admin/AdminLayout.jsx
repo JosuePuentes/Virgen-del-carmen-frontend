@@ -82,6 +82,9 @@ export default function AdminLayout() {
           <Link to="/admin/ordenes-compra" className={location.pathname.startsWith('/admin/ordenes-compra') ? 'active' : ''}>
             Órdenes de compra
           </Link>
+          <Link to="/admin/lista-comparativa" className={location.pathname.startsWith('/admin/lista-comparativa') ? 'active' : ''}>
+            Lista comparativa
+          </Link>
           {hasModulo('inventario') && (
             <Link to="/admin/inventario" className={location.pathname.startsWith('/admin/inventario') ? 'active' : ''}>
               Inventario

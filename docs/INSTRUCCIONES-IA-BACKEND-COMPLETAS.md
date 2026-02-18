@@ -97,7 +97,8 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 ## 9. Control de fallas
 
 - `GET /fallas/` – listar productos faltantes (cantidad_pedida > cantidad_encontrada)
-- Cada item: `pedido_id`, `codigo`, `descripcion`, `cantidad_pedida`, `cantidad_encontrada`
+- Cada item: `pedido_id`, `codigo`, `descripcion`, `cantidad_pedida`, `cantidad_encontrada`, `proveedor_id`, `proveedor_empresa`, `precio_venta`
+- `PATCH /fallas/{id}` – body: `{ proveedor_id, precio_venta }` para marcar proveedor y precio de venta
 - Opcional: `GET /fallas/?pedido_id=...` para filtrar por pedido
 
 ---
@@ -174,7 +175,16 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 19. Órdenes de compra
+## 19. Lista comparativa
+
+- `GET /listas-comparativas/` – listar listas de precio cargadas por proveedor
+- `GET /listas-comparativas/productos` – todos los productos de todas las listas (con precio_final ya con descuento de condiciones comerciales aplicado)
+- `POST /listas-comparativas/upload` – FormData: `file` (Excel), `proveedor_id`. Columnas Excel: codigo, descripcion, marca, precio, existencia. Aplicar descuento de `condiciones_comerciales` del proveedor al precio
+- Cada producto en la respuesta: `proveedor_id`, `proveedor_empresa`, `codigo`, `descripcion`, `marca`, `precio` (original), `precio_final` (con descuento), `existencia`
+
+---
+
+## 20. Órdenes de compra
 
 - `GET /ordenes-compra/` – listar órdenes. Cada item: _id, proveedor_empresa, proveedor_rif, total, totalizada/estado, fecha
 - `POST /ordenes-compra/` – crear orden. Body: { proveedor_id, proveedor_rif, productos: [{ codigo, descripcion, costo, cantidad }], total }
@@ -184,7 +194,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 20. Dashboard finanzas
+## 21. Dashboard finanzas
 
 - `GET /finanzas/resumen` – { productos_vendidos, valor_vendido, utilidad }
 - `GET /finanzas/top-productos?tipo=mas` – top 10 más vendidos
@@ -195,7 +205,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 21. Gastos
+## 22. Gastos
 
 - `POST /gastos/` – registrar gasto (monto, descripcion, fecha, categoria)
 - `GET /gastos/?desde=YYYY-MM-DD&hasta=YYYY-MM-DD` – listar con filtros por fecha
@@ -203,7 +213,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 ---
 
-## 22. Cierre diario
+## 23. Cierre diario
 
 - `GET /cierre-diario/?fecha=YYYY-MM-DD` – resumen del día
 - `GET /cierre-diario/?desde=YYYY-MM-DD&hasta=YYYY-MM-DD` – rango de fechas
@@ -234,6 +244,8 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 | Proveedores | CRUD con RIF, días crédito, condiciones %, pronto pago % |
 | Compras | Totalizar directo o generar orden |
 | Órdenes de compra | CRUD, editar, totalizar (suma a inventario) |
+| Lista comparativa | Cargar Excel por proveedor, buscar, comparar precios, mi existencia |
+| Control fallas | Incluir proveedor y precio_venta por producto faltante |
 
 ---
 

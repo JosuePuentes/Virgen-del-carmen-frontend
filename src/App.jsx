@@ -32,6 +32,7 @@ import AdminProveedores from './pages/admin/AdminProveedores'
 import AdminCompras from './pages/admin/AdminCompras'
 import AdminOrdenesCompra from './pages/admin/AdminOrdenesCompra'
 import AdminOrdenCompraDetalle from './pages/admin/AdminOrdenCompraDetalle'
+import AdminListaComparativa from './pages/admin/AdminListaComparativa'
 import AdminGuard from './components/AdminGuard'
 
 function ScrollToHash() {
@@ -85,6 +86,7 @@ function AppRoutes() {
           <Route path="compras" element={<AdminCompras />} />
           <Route path="ordenes-compra" element={<AdminOrdenesCompra />} />
           <Route path="ordenes-compra/:id" element={<AdminOrdenCompraDetalle />} />
+          <Route path="lista-comparativa" element={<AdminListaComparativa />} />
         </Route>
       </Routes>
     </>
