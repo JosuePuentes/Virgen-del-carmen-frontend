@@ -35,7 +35,7 @@ export default function LoginPage() {
         } else {
           setToken(result.data.access_token)
           if (result.data.rif) setRif(result.data.rif)
-          navigate('/')
+          navigate('/cliente')
         }
         window.location.reload()
       } else {

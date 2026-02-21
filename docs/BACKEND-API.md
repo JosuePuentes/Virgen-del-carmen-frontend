@@ -41,7 +41,14 @@ Este documento describe la API del backend (FastAPI en Render) para conectar el 
 
 ---
 
-## 5. Pedidos
+## 5. Clientes (área cliente: Mi cuenta)
+
+- **GET** `/clientes/{rif}` — Obtener datos del cliente (token cliente, usar su propio rif)
+- **PATCH** `/clientes/{rif}` — Actualizar datos del cliente (body parcial: encargado, direccion, telefono, email, password)
+
+---
+
+## 6. Pedidos
 
 - **POST** `/pedidos/` — Crear pedido
 - **GET** `/obtener_pedidos/` — Listar (query: estados[], fecha_desde, fecha_hasta)
@@ -49,13 +56,13 @@ Este documento describe la API del backend (FastAPI en Render) para conectar el 
 
 ---
 
-## 6. Chatbot
+## 7. Chatbot
 
 - **POST** `/api/chat` — Body: `{ "prompt": "string" }` → `{ "response": "string" }`
 
 ---
 
-## 7. Resumen
+## 8. Resumen
 
 - Guardar `access_token` en localStorage y enviarlo en `Authorization: Bearer <token>`
 - Los `_id` vienen como string

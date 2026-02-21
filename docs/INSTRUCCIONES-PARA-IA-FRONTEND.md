@@ -56,7 +56,8 @@ Todas las peticiones al backend deben ir a:
 
 - Guardar `access_token` (localStorage/sessionStorage o estado) y usarlo en `Authorization: Bearer ` en las rutas del área cliente.
 - Usar `role === "client"` para redirigir al área de cliente (catálogo, pedidos, reclamos, etc.).
-- Usar `rif` para llamadas que lo pidan (p. ej. pedidos del cliente).
+- Usar `rif` para llamadas que lo pidan (p. ej. pedidos del cliente, Mi cuenta).
+- **Menú cliente:** Incluir siempre "Mi cuenta" (o "Datos del cliente" / "Perfil") en el menú del área cliente. No depende de módulos (ver `docs/INSTRUCCIONES-FRONTEND-MODULO-CLIENTE-AREA-CLIENTE.md`).
 
 **Respuestas de error (mostrar el mensaje al usuario y no dar acceso):**
 
@@ -131,7 +132,16 @@ En **todas** las peticiones del panel admin enviar el header:
 
 ---
 
-## 6. Rutas del panel admin (resumen)
+## 6. Área cliente: Mi cuenta
+
+Cuando el usuario está logueado como cliente (`role === "client"`), el menú debe incluir **siempre** una opción "Mi cuenta" para ver y editar sus datos. Detalle completo en **`docs/INSTRUCCIONES-FRONTEND-MODULO-CLIENTE-AREA-CLIENTE.md`**.
+
+- **Ver mis datos:** `GET /clientes/{rif}` (usar el rif guardado en la sesión).
+- **Actualizar mis datos:** `PATCH /clientes/{rif}` con body parcial (encargado, direccion, telefono, email, password).
+
+---
+
+## 7. Rutas del panel admin (resumen)
 
 Para que las respuestas sean correctas, usar estas rutas y métodos. Detalle completo en el documento **PANEL-ADMIN-PARA-FRONTEND.md** (mismo repo backend).
 
@@ -149,7 +159,7 @@ Los `_id` de MongoDB vienen como **string** en las respuestas.
 
 ---
 
-## 7. Errores del backend
+## 8. Errores del backend
 
 Las respuestas de error suelen tener un JSON con el campo **`detail`** (string o array de strings). Siempre:
 
@@ -159,7 +169,7 @@ Las respuestas de error suelen tener un JSON con el campo **`detail`** (string o
 
 ---
 
-## 8. Dónde está la documentación completa
+## 9. Dónde está la documentación completa
 
 En el **repositorio del backend** (https://github.com/JosuePuentes/Zas-backend):
 

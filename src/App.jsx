@@ -36,6 +36,21 @@ import AdminListaComparativa from './pages/admin/AdminListaComparativa'
 import AdminFormatosImpresion from './pages/admin/AdminFormatosImpresion'
 import AdminInformes from './pages/admin/AdminInformes'
 import AdminGuard from './components/AdminGuard'
+import ClientGuard from './components/ClientGuard'
+import ClientLayout from './pages/cliente/ClientLayout'
+import ClientDashboard from './pages/cliente/ClientDashboard'
+import ClientCatalogo from './pages/cliente/ClientCatalogo'
+import ClientCarrito from './pages/cliente/ClientCarrito'
+import ClientCuentasPorPagar from './pages/cliente/ClientCuentasPorPagar'
+import ClientCuentasPagadas from './pages/cliente/ClientCuentasPagadas'
+import ClientPromociones from './pages/cliente/ClientPromociones'
+import ClientNuevasEntradas from './pages/cliente/ClientNuevasEntradas'
+import ClientPreciosBajaron from './pages/cliente/ClientPreciosBajaron'
+import ClientPlanificacionCompra from './pages/cliente/ClientPlanificacionCompra'
+import ClientUltimasCompras from './pages/cliente/ClientUltimasCompras'
+import ClientPedidos from './pages/cliente/ClientPedidos'
+import ClientReclamos from './pages/cliente/ClientReclamos'
+import ClientMiCuenta from './pages/cliente/ClientMiCuenta'
 
 function ScrollToHash() {
   const { pathname, hash } = useLocation()
@@ -91,6 +106,21 @@ function AppRoutes() {
           <Route path="lista-comparativa" element={<AdminListaComparativa />} />
           <Route path="formatos-impresion" element={<AdminFormatosImpresion />} />
           <Route path="informes" element={<AdminInformes />} />
+        </Route>
+        <Route path="/cliente" element={<ClientGuard><ClientLayout /></ClientGuard>}>
+          <Route index element={<ClientDashboard />} />
+          <Route path="catalogo" element={<ClientCatalogo />} />
+          <Route path="carrito" element={<ClientCarrito />} />
+          <Route path="cuentas-por-pagar" element={<ClientCuentasPorPagar />} />
+          <Route path="cuentas-pagadas" element={<ClientCuentasPagadas />} />
+          <Route path="promociones" element={<ClientPromociones />} />
+          <Route path="nuevas-entradas" element={<ClientNuevasEntradas />} />
+          <Route path="precios-bajaron" element={<ClientPreciosBajaron />} />
+          <Route path="planificacion-compra" element={<ClientPlanificacionCompra />} />
+          <Route path="ultimas-compras" element={<ClientUltimasCompras />} />
+          <Route path="pedidos" element={<ClientPedidos />} />
+          <Route path="reclamos" element={<ClientReclamos />} />
+          <Route path="mi-cuenta" element={<ClientMiCuenta />} />
         </Route>
       </Routes>
     </>

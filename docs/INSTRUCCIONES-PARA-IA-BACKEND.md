@@ -32,6 +32,7 @@ El frontend **Virgen del Carmen** (Vite + React) está conectado a tu backend Fa
    - `GET /obtener_pedidos/` — Listar pedidos (token admin)
    - `GET /clientes/` — Listar clientes (token admin)
    - `GET /punto-venta/ventas` — Listar ventas (token admin)
+   - **Área cliente** (token cliente): `GET /clientes/{rif}`, `PATCH /clientes/{rif}`, `GET /cuentas-por-cobrar/cliente/{rif}`, `GET /facturas/pagadas/cliente/{rif}`. Detalle: `docs/BACKEND-AREA-CLIENTE.md`
 
 4. **Login unificado:**
    - El frontend tiene una sola página `/login` con pestañas Cliente vs Administrador.
@@ -50,6 +51,7 @@ El frontend **Virgen del Carmen** (Vite + React) está conectado a tu backend Fa
 
 ## Referencia rápida
 
+- **Área cliente:** `docs/BACKEND-AREA-CLIENTE.md` — Rutas para el panel `/cliente` (Mi cuenta, cuentas por pagar, etc.)
 - Documento de API del backend: `Zas-backend-main/BACKEND-ESTADO-PARA-FRONTEND.md`
 - Documento resumido en el frontend: `Frontend virgen del carmen/docs/BACKEND-API.md`
 - URL del backend (ejemplo): `https://droclven-back.onrender.com`
