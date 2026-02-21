@@ -4,6 +4,7 @@ import { apiGet, apiPatch, getAdminToken } from '../../config/api'
 export default function AdminControlFallas() {
   const [fallas, setFallas] = useState([])
   const [proveedores, setProveedores] = useState([])
+  const [inventario, setInventario] = useState([])
   const [pedidoFiltro, setPedidoFiltro] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -13,12 +14,14 @@ export default function AdminControlFallas() {
     setLoading(true)
     setError('')
     try {
-      const [dataFallas, dataProv] = await Promise.all([
+      const [dataFallas, dataProv, dataInv] = await Promise.all([
         apiGet('fallas/', getAdminToken()).catch(() => []),
         apiGet('proveedores/', getAdminToken()).catch(() => []),
+        apiGet('inventario_maestro/', getAdminToken()).catch(() => []),
       ])
       setFallas(Array.isArray(dataFallas) ? dataFallas : dataFallas?.fallas || dataFallas?.items || [])
       setProveedores(Array.isArray(dataProv) ? dataProv : dataProv?.proveedores || dataProv?.items || [])
+      setInventario(Array.isArray(dataInv) ? dataInv : dataInv?.items || dataInv?.productos || [])
     } catch (err) {
       setError(err.message || 'No se pudo cargar')
       setFallas([])
@@ -32,6 +35,13 @@ export default function AdminControlFallas() {
   const fallasFiltradas = pedidoFiltro
     ? fallas.filter((f) => String(f.pedido_id || f.pedido).includes(pedidoFiltro))
     : fallas
+
+  const sugerenciasStock = inventario.filter((p) => {
+    const ex = Number(p.existencia) || 0
+    const min = Number(p.stock_minimo) || 0
+    const max = Number(p.stock_maximo) || 0
+    return (min > 0 && ex < min) || (max > 0 && ex > max)
+  })
 
   async function actualizarFalla(fallaId, proveedorId, precioVenta) {
     setError('')
@@ -54,6 +64,48 @@ export default function AdminControlFallas() {
       <p className="admin-welcome">Productos donde cantidad pedida &gt; cantidad encontrada. Marque proveedor y precio de venta.</p>
       {error && <p className="auth-error">{error}</p>}
       {exito && <p className="auth-success">{exito}</p>}
+
+      {/* Sugerencias de stock según mín/máx */}
+      {sugerenciasStock.length > 0 && (
+        <section className="admin-section fallas-sugerencias">
+          <h2>Sugerencias de stock</h2>
+          <p className="admin-welcome">Productos fuera del rango stock mínimo/máximo.</p>
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Descripción</th>
+                  <th>Existencia</th>
+                  <th>Mín</th>
+                  <th>Máx</th>
+                  <th>Sugerencia</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sugerenciasStock.map((p) => {
+                  const ex = Number(p.existencia) || 0
+                  const min = Number(p.stock_minimo) || 0
+                  const max = Number(p.stock_maximo) || 0
+                  let sug = '—'
+                  if (min > 0 && ex < min) sug = `Comprar ${min - ex} unidades`
+                  else if (max > 0 && ex > max) sug = `Stock alto (${ex - max} sobre máximo)`
+                  return (
+                    <tr key={p._id || p.codigo} className={ex < min ? 'sugerencia-bajo' : 'sugerencia-alto'}>
+                      <td>{p.codigo || p._id}</td>
+                      <td>{p.descripcion || p.nombre || '—'}</td>
+                      <td>{ex}</td>
+                      <td>{min || '—'}</td>
+                      <td>{max || '—'}</td>
+                      <td>{sug}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
 
       <div className="admin-filtro">
         <label>

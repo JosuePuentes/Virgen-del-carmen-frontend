@@ -11,6 +11,7 @@ export default function AdminInventario() {
   const [subiendoExcel, setSubiendoExcel] = useState(false)
   const [form, setForm] = useState({
     codigo: '', descripcion: '', marca: '', costo: '', utilidad: '', precio: '', existencia: '',
+    stock_minimo: '', stock_maximo: '',
   })
   const [foto, setFoto] = useState(null)
 
@@ -32,7 +33,17 @@ export default function AdminInventario() {
 
   function handleChange(e) {
     const { name, value } = e.target
-    setForm((f) => ({ ...f, [name]: value }))
+    setForm((f) => {
+      const next = { ...f, [name]: value }
+      if ((name === 'costo' || name === 'utilidad') && (next.costo || next.utilidad)) {
+        const costo = parseFloat(next.costo) || 0
+        const utilidad = parseFloat(next.utilidad) || 0
+        if (costo > 0 && utilidad >= 0) {
+          next.precio = (costo * (1 + utilidad / 100)).toFixed(2)
+        }
+      }
+      return next
+    })
   }
 
   async function handleCrear(e) {
@@ -49,6 +60,8 @@ export default function AdminInventario() {
         utilidad: form.utilidad ? Number(form.utilidad) : undefined,
         precio: form.precio ? Number(form.precio) : undefined,
         existencia: form.existencia ? Number(form.existencia) : 0,
+        stock_minimo: form.stock_minimo ? Number(form.stock_minimo) : undefined,
+        stock_maximo: form.stock_maximo ? Number(form.stock_maximo) : undefined,
       }
       if (foto) {
         const fd = new FormData()
@@ -61,7 +74,7 @@ export default function AdminInventario() {
         await apiPost('inventario_maestro/', body, getAdminToken())
       }
       setExito('Producto creado correctamente.')
-      setForm({ codigo: '', descripcion: '', marca: '', costo: '', utilidad: '', precio: '', existencia: '' })
+      setForm({ codigo: '', descripcion: '', marca: '', costo: '', utilidad: '', precio: '', existencia: '', stock_minimo: '', stock_maximo: '' })
       setFoto(null)
       await cargar()
     } catch (err) {
@@ -94,7 +107,7 @@ export default function AdminInventario() {
   return (
     <div className="admin-page">
       <h1>Inventario</h1>
-      <p className="admin-welcome">Carga masiva por Excel (Codigo, Descripcion, Marca, Costo, Utilidad, Precio, Existencia) o cree productos individuales con foto opcional.</p>
+      <p className="admin-welcome">Carga masiva por Excel (Codigo, Descripcion, Marca, Costo, Utilidad, Precio, Existencia, Stock_minimo, Stock_maximo) o cree productos individuales. El precio se calcula automáticamente: Costo × (1 + Utilidad%).</p>
       {error && <p className="auth-error">{error}</p>}
       {exito && <p className="auth-success">{exito}</p>}
 
@@ -112,10 +125,12 @@ export default function AdminInventario() {
           <input name="codigo" placeholder="Código" value={form.codigo} onChange={handleChange} required />
           <input name="descripcion" placeholder="Descripción" value={form.descripcion} onChange={handleChange} required />
           <input name="marca" placeholder="Marca" value={form.marca} onChange={handleChange} />
-          <input name="costo" type="number" step="0.01" placeholder="Costo" value={form.costo} onChange={handleChange} />
+          <input name="costo" type="number" step="0.01" placeholder="Costo ($)" value={form.costo} onChange={handleChange} />
           <input name="utilidad" type="number" step="0.01" placeholder="Utilidad %" value={form.utilidad} onChange={handleChange} />
-          <input name="precio" type="number" step="0.01" placeholder="Precio" value={form.precio} onChange={handleChange} />
+          <input name="precio" type="number" step="0.01" placeholder="Precio (auto)" value={form.precio} onChange={handleChange} title="Se calcula: Costo × (1 + Utilidad/100)" />
           <input name="existencia" type="number" placeholder="Existencia" value={form.existencia} onChange={handleChange} />
+          <input name="stock_minimo" type="number" placeholder="Stock mínimo" value={form.stock_minimo} onChange={handleChange} />
+          <input name="stock_maximo" type="number" placeholder="Stock máximo" value={form.stock_maximo} onChange={handleChange} />
           <label>
             Foto (opcional)
             <input type="file" accept="image/*" onChange={(e) => setFoto(e.target.files?.[0] || null)} />
@@ -125,6 +140,56 @@ export default function AdminInventario() {
           </button>
         </form>
       </section>
+
+      {/* Sugerencias de stock */}
+      {!loading && productos.length > 0 && (() => {
+        const conSugerencia = productos.filter((p) => {
+          const ex = Number(p.existencia) || 0
+          const min = Number(p.stock_minimo) || 0
+          const max = Number(p.stock_maximo) || 0
+          return (min > 0 && ex < min) || (max > 0 && ex > max)
+        })
+        if (conSugerencia.length === 0) return null
+        return (
+          <section className="admin-section inventario-sugerencias">
+            <h2>Sugerencias de stock</h2>
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Existencia</th>
+                    <th>Mín</th>
+                    <th>Máx</th>
+                    <th>Sugerencia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {conSugerencia.map((p) => {
+                    const ex = Number(p.existencia) || 0
+                    const min = Number(p.stock_minimo) || 0
+                    const max = Number(p.stock_maximo) || 0
+                    let sug = '—'
+                    if (min > 0 && ex < min) sug = `Comprar ${min - ex} unidades`
+                    else if (max > 0 && ex > max) sug = `Stock alto (${ex - max} sobre máximo)`
+                    return (
+                      <tr key={p._id || p.codigo} className={ex < min ? 'sugerencia-bajo' : 'sugerencia-alto'}>
+                        <td>{p.codigo || p._id}</td>
+                        <td>{p.descripcion || p.nombre || '—'}</td>
+                        <td>{ex}</td>
+                        <td>{min || '—'}</td>
+                        <td>{max || '—'}</td>
+                        <td>{sug}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      })()}
 
       <h2>Listado</h2>
       {loading && <p className="catalogo-loading">Cargando inventario...</p>}
@@ -141,6 +206,8 @@ export default function AdminInventario() {
                   <th>Marca</th>
                   <th>Precio</th>
                   <th>Existencia</th>
+                  <th>Stock mín</th>
+                  <th>Stock máx</th>
                 </tr>
               </thead>
               <tbody>
@@ -151,6 +218,8 @@ export default function AdminInventario() {
                     <td>{p.marca || p.laboratorio || '—'}</td>
                     <td><Precio value={p.precio} /></td>
                     <td>{p.existencia ?? '—'}</td>
+                    <td>{p.stock_minimo ?? '—'}</td>
+                    <td>{p.stock_maximo ?? '—'}</td>
                   </tr>
                 ))}
               </tbody>

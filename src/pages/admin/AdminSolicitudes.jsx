@@ -7,6 +7,9 @@ export default function AdminSolicitudes() {
   const [error, setError] = useState('')
   const [accionando, setAccionando] = useState(null)
   const [modalAprobar, setModalAprobar] = useState(null)
+  const [confirmarAprobar, setConfirmarAprobar] = useState(false)
+  const [modalRechazar, setModalRechazar] = useState(null)
+  const [motivoRechazo, setMotivoRechazo] = useState('')
   const [formAprobar, setFormAprobar] = useState({
     limite_credito: '',
     dias_credito: '',
@@ -34,8 +37,12 @@ export default function AdminSolicitudes() {
     setFormAprobar({ limite_credito: '', dias_credito: '', monto: '' })
   }
 
+  function solicitarConfirmarAprobar() {
+    setConfirmarAprobar(true)
+  }
+
   async function handleAprobar(e) {
-    e.preventDefault()
+    e?.preventDefault()
     if (!modalAprobar) return
     setAccionando(modalAprobar.rif)
     try {
@@ -45,6 +52,7 @@ export default function AdminSolicitudes() {
         monto: Number(formAprobar.monto) || 0,
       }, getAdminToken())
       setModalAprobar(null)
+      setConfirmarAprobar(false)
       await cargar()
     } catch (err) {
       setError(err.message || 'Error al aprobar')
@@ -53,10 +61,25 @@ export default function AdminSolicitudes() {
     }
   }
 
-  async function handleRechazar(rif) {
-    setAccionando(rif)
+  function abrirRechazar(s) {
+    setModalRechazar(s)
+    setMotivoRechazo('')
+  }
+
+  async function handleRechazar(e) {
+    e?.preventDefault()
+    if (!modalRechazar) return
+    const motivo = motivoRechazo.trim()
+    if (!motivo) {
+      setError('Indique el motivo del rechazo')
+      return
+    }
+    setAccionando(modalRechazar.rif)
+    setError('')
     try {
-      await apiPatch(`clientes/${rif}/rechazar`, {}, getAdminToken())
+      await apiPatch(`clientes/${modalRechazar.rif}/rechazar`, { motivo }, getAdminToken())
+      setModalRechazar(null)
+      setMotivoRechazo('')
       await cargar()
     } catch (err) {
       setError(err.message || 'Error al rechazar')
@@ -100,7 +123,7 @@ export default function AdminSolicitudes() {
                         <button type="button" className="btn-aprobar" onClick={() => abrirAprobar(s)} disabled={!!accionando}>
                           Aprobar
                         </button>
-                        <button type="button" className="btn-rechazar" onClick={() => handleRechazar(s.rif)} disabled={!!accionando}>
+                        <button type="button" className="btn-rechazar" onClick={() => abrirRechazar(s)} disabled={!!accionando}>
                           Rechazar
                         </button>
                       </div>
@@ -117,7 +140,7 @@ export default function AdminSolicitudes() {
         <div className="modal-overlay" onClick={() => setModalAprobar(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>Aprobar cliente: {modalAprobar.empresa || modalAprobar.rif}</h3>
-            <form onSubmit={handleAprobar}>
+            <form onSubmit={(e) => { e.preventDefault(); solicitarConfirmarAprobar(); }}>
               <label>
                 Límite de crédito ($)
                 <input type="number" step="0.01" value={formAprobar.limite_credito} onChange={(e) => setFormAprobar((f) => ({ ...f, limite_credito: e.target.value }))} required />
@@ -132,7 +155,49 @@ export default function AdminSolicitudes() {
               </label>
               <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={() => setModalAprobar(null)}>Cancelar</button>
-                <button type="submit" className="btn-hero" disabled={!!accionando}>{accionando ? '…' : 'Aprobar'}</button>
+                <button type="submit" className="btn-hero" disabled={!!accionando}>Aprobar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {confirmarAprobar && modalAprobar && (
+        <div className="modal-overlay" onClick={() => setConfirmarAprobar(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Confirmar aprobación</h3>
+            <p>¿Está seguro de aprobar a <strong>{modalAprobar.empresa || modalAprobar.rif}</strong> con límite ${formAprobar.limite_credito}, {formAprobar.dias_credito} días de crédito?</p>
+            <div className="modal-actions">
+              <button type="button" className="btn-secondary" onClick={() => setConfirmarAprobar(false)}>Cancelar</button>
+              <button type="button" className="btn-hero" onClick={handleAprobar} disabled={!!accionando}>
+                {accionando ? '…' : 'Confirmar aprobación'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {modalRechazar && (
+        <div className="modal-overlay" onClick={() => setModalRechazar(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Rechazar solicitud: {modalRechazar.empresa || modalRechazar.rif}</h3>
+            <form onSubmit={handleRechazar}>
+              <label>
+                Motivo del rechazo <span className="required">*</span>
+                <textarea
+                  value={motivoRechazo}
+                  onChange={(e) => setMotivoRechazo(e.target.value)}
+                  placeholder="Indique el motivo del rechazo..."
+                  rows="4"
+                  required
+                />
+              </label>
+              <p className="modal-hint">El motivo se guardará para los informes de solicitudes.</p>
+              <div className="modal-actions">
+                <button type="button" className="btn-secondary" onClick={() => setModalRechazar(null)}>Cancelar</button>
+                <button type="submit" className="btn-rechazar" disabled={!!accionando || !motivoRechazo.trim()}>
+                  {accionando ? '…' : 'Confirmar rechazo'}
+                </button>
               </div>
             </form>
           </div>

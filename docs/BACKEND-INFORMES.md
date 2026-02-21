@@ -18,7 +18,7 @@ El frontend tiene un módulo **Informes** que genera reportes a partir de los da
 | **Compras** | `GET /ordenes-compra/` | _id, proveedor_empresa, total, fecha, estado |
 | **Picking** | `GET /pedidos/picking/` o `GET /pedidos/por_estado/picking` | _id, cliente, rif, total, estado |
 | **Packing** | `GET /pedidos/por_estado/packing` | _id, cliente, rif, total, estado |
-| **Solicitudes** | `GET /clientes/solicitudes/pendientes` | rif, empresa, encargado, fecha |
+| **Solicitudes** | `GET /clientes/solicitudes/pendientes` | rif, empresa, encargado, fecha. Para historial (aprobadas/rechazadas con motivo): `GET /clientes/solicitudes/historial` o similar. |
 | **Finanzas** | `GET /finanzas/resumen`, `GET /finanzas/gastos`, `GET /cuentas-por-cobrar/total`, `GET /cuentas-por-pagar/total` | Resumen con valor_vendido, utilidad, cuentas_cobrar, cuentas_pagar, gastos |
 
 ---

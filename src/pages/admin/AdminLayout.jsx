@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { getAdminUser, hasModulo, logoutAdmin } from '../../config/api'
 import { useBcv } from '../../context/BcvContext'
+import { useNotificaciones, getConteoParaRuta } from '../../context/NotificacionesContext'
 
 const ITEMS_MENU = [
   { to: '/admin', label: 'Dashboard', modulo: null },
@@ -35,7 +36,18 @@ export default function AdminLayout() {
   const location = useLocation()
   const user = getAdminUser()
   const { bcv } = useBcv()
+  const { conteos, total, mensajes, cargar } = useNotificaciones()
   const [busqueda, setBusqueda] = useState('')
+  const [dropdownAbierto, setDropdownAbierto] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setDropdownAbierto(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const itemsVisibles = useMemo(() => {
     const conPermiso = ITEMS_MENU.filter((item) => !item.modulo || hasModulo(item.modulo))
@@ -73,15 +85,19 @@ export default function AdminLayout() {
           />
         </div>
         <nav className="admin-nav">
-          {itemsVisibles.map((item) => (
-            <Link
-              key={item.to + item.label}
-              to={item.to}
-              className={isActive(item) ? 'active' : ''}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {itemsVisibles.map((item) => {
+            const n = getConteoParaRuta(conteos, item.to)
+            return (
+              <Link
+                key={item.to + item.label}
+                to={item.to}
+                className={isActive(item) ? 'active' : ''}
+              >
+                {item.label}
+                {n > 0 && <span className="admin-nav-badge">{n > 99 ? '99+' : n}</span>}
+              </Link>
+            )
+          })}
         </nav>
         <div className="admin-sidebar-footer">
           {user?.usuario && <span className="admin-user">{user.usuario}</span>}
@@ -91,9 +107,44 @@ export default function AdminLayout() {
           <Link to="/" className="admin-site-link">Ir al sitio</Link>
         </div>
       </aside>
-      <main className="admin-main">
-        <Outlet />
-      </main>
+      <div className="admin-right">
+        <header className="admin-top-bar">
+          <span></span>
+          <div className="admin-notif-bell-wrap" ref={dropdownRef}>
+            <button
+              type="button"
+              className="admin-notif-bell"
+              onClick={() => { setDropdownAbierto(!dropdownAbierto); if (!dropdownAbierto) cargar(); }}
+              title="Notificaciones"
+            >
+              🔔
+              {total > 0 && <span className="admin-notif-badge">{total > 99 ? '99+' : total}</span>}
+            </button>
+            {dropdownAbierto && (
+              <div className="admin-notif-dropdown">
+                <h4>Notificaciones</h4>
+                {mensajes.length === 0 ? (
+                  <p className="admin-notif-empty">Sin notificaciones pendientes</p>
+                ) : (
+                  <ul className="admin-notif-list">
+                    {mensajes.map((m) => (
+                      <li key={m.key}>
+                        <Link to={m.to} onClick={() => setDropdownAbierto(false)}>
+                          <span className="admin-notif-count">{m.count}</span>
+                          <span>{m.label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+        </header>
+        <main className="admin-main">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

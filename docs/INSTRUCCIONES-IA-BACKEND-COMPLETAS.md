@@ -37,7 +37,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 - `GET /clientes/solicitudes/pendientes` – listar solicitudes pendientes
 - `PATCH /clientes/{rif}/aprobar` – al aprobar, el body debe aceptar: `limite_credito`, `dias_credito`, `monto` (o campos que definas para crédito)
-- `PATCH /clientes/{rif}/rechazar`
+- `PATCH /clientes/{rif}/rechazar` – body: `{ "motivo": "string" }`. Guardar el motivo para informes de solicitudes.
 
 ---
 
@@ -59,7 +59,7 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 
 - `POST /pedidos/` – crear pedido con `cliente`, `rif`, `productos[]`, `total`, `subtotal`
 - Permitir crear pedidos **sin verificar existencia** (para control de fallas)
-- `GET /inventario_maestro/` – para buscador en tiempo real (no incluir `costo` ni `utilidad` en la respuesta para ese endpoint si se usa en crear pedido, o crear endpoint específico)
+- `GET /inventario_maestro/` – para buscador en tiempo real. Incluir `stock_minimo`, `stock_maximo` para sugerencias. (no incluir `costo` ni `utilidad` en la respuesta para ese endpoint si se usa en crear pedido, o crear endpoint específico)
 - `GET /clientes/` o `/clientes/all` – para selector de cliente
 
 ---
