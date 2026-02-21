@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
-import { apiGet, apiPost, apiPostForm, getAdminToken } from '../../config/api'
+import { apiGet, apiPost, apiPostForm, apiPut, getAdminToken } from '../../config/api'
 import { Precio } from '../../components/Precio'
+
+function toArray(data) {
+  if (Array.isArray(data)) return data
+  return data?.items || data?.productos || data?.data || data?.results || []
+}
 
 export default function AdminInventario() {
   const [productos, setProductos] = useState([])
@@ -8,7 +13,9 @@ export default function AdminInventario() {
   const [error, setError] = useState('')
   const [exito, setExito] = useState('')
   const [creando, setCreando] = useState(false)
+  const [guardando, setGuardando] = useState(false)
   const [subiendoExcel, setSubiendoExcel] = useState(false)
+  const [editingProducto, setEditingProducto] = useState(null)
   const [form, setForm] = useState({
     codigo: '', descripcion: '', marca: '', costo: '', utilidad: '', precio: '', existencia: '',
     stock_minimo: '', stock_maximo: '',
@@ -20,7 +27,7 @@ export default function AdminInventario() {
     setError('')
     try {
       const data = await apiGet('inventario_maestro/', getAdminToken())
-      setProductos(Array.isArray(data) ? data : data?.items || data?.productos || [])
+      setProductos(toArray(data))
     } catch (err) {
       setError(err.message || 'No se pudo cargar el inventario')
       setProductos([])
@@ -69,9 +76,11 @@ export default function AdminInventario() {
           if (v !== undefined && v !== '') fd.append(k, v)
         })
         fd.append('foto', foto)
-        await apiPostForm('inventario_maestro/', fd, getAdminToken())
+        const created = await apiPostForm('inventario_maestro/', fd, getAdminToken())
+        if (created && (created._id || created.id)) setProductos((prev) => [created, ...(Array.isArray(prev) ? prev : [])])
       } else {
-        await apiPost('inventario_maestro/', body, getAdminToken())
+        const created = await apiPost('inventario_maestro/', body, getAdminToken())
+        if (created && (created._id || created.id)) setProductos((prev) => [created, ...(Array.isArray(prev) ? prev : [])])
       }
       setExito('Producto creado correctamente.')
       setForm({ codigo: '', descripcion: '', marca: '', costo: '', utilidad: '', precio: '', existencia: '', stock_minimo: '', stock_maximo: '' })
@@ -81,6 +90,53 @@ export default function AdminInventario() {
       setError(err.message || 'Error al crear producto')
     } finally {
       setCreando(false)
+    }
+  }
+
+  function abrirEditar(p) {
+    setEditingProducto(p)
+    setForm({
+      codigo: p.codigo || '',
+      descripcion: p.descripcion || p.nombre || '',
+      marca: p.marca || p.laboratorio || '',
+      costo: p.costo ?? '',
+      utilidad: p.utilidad ?? '',
+      precio: p.precio ?? '',
+      existencia: p.existencia ?? '',
+      stock_minimo: p.stock_minimo ?? '',
+      stock_maximo: p.stock_maximo ?? '',
+    })
+    setFoto(null)
+  }
+
+  async function handleEditar(e) {
+    e?.preventDefault()
+    if (!editingProducto) return
+    const id = editingProducto._id || editingProducto.id
+    setError('')
+    setExito('')
+    setGuardando(true)
+    try {
+      const body = {
+        codigo: form.codigo,
+        descripcion: form.descripcion,
+        marca: form.marca || undefined,
+        costo: form.costo ? Number(form.costo) : undefined,
+        utilidad: form.utilidad ? Number(form.utilidad) : undefined,
+        precio: form.precio ? Number(form.precio) : undefined,
+        existencia: form.existencia ? Number(form.existencia) : 0,
+        stock_minimo: form.stock_minimo ? Number(form.stock_minimo) : undefined,
+        stock_maximo: form.stock_maximo ? Number(form.stock_maximo) : undefined,
+      }
+      await apiPut(`inventario_maestro/${id}`, body, getAdminToken())
+      setExito('Producto actualizado.')
+      setEditingProducto(null)
+      setForm({ codigo: '', descripcion: '', marca: '', costo: '', utilidad: '', precio: '', existencia: '', stock_minimo: '', stock_maximo: '' })
+      await cargar()
+    } catch (err) {
+      setError(err.message || 'Error al actualizar')
+    } finally {
+      setGuardando(false)
     }
   }
 
@@ -208,6 +264,7 @@ export default function AdminInventario() {
                   <th>Existencia</th>
                   <th>Stock mín</th>
                   <th>Stock máx</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -220,12 +277,38 @@ export default function AdminInventario() {
                     <td>{p.existencia ?? '—'}</td>
                     <td>{p.stock_minimo ?? '—'}</td>
                     <td>{p.stock_maximo ?? '—'}</td>
+                    <td>
+                      <button type="button" className="btn-aprobar btn-sm" onClick={() => abrirEditar(p)}>Editar</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           )}
           {productos.length > 100 && <p className="admin-more">Mostrando 100 de {productos.length} productos</p>}
+        </div>
+      )}
+
+      {editingProducto && (
+        <div className="modal-overlay" onClick={() => setEditingProducto(null)}>
+          <div className="modal-content modal-inventario-edit" onClick={(e) => e.stopPropagation()}>
+            <h3>Editar producto: {editingProducto.codigo || editingProducto._id}</h3>
+            <form onSubmit={handleEditar} className="admin-form admin-form-grid">
+              <input name="codigo" placeholder="Código" value={form.codigo} onChange={handleChange} required />
+              <input name="descripcion" placeholder="Descripción" value={form.descripcion} onChange={handleChange} required />
+              <input name="marca" placeholder="Marca" value={form.marca} onChange={handleChange} />
+              <input name="costo" type="number" step="0.01" placeholder="Costo ($)" value={form.costo} onChange={handleChange} />
+              <input name="utilidad" type="number" step="0.01" placeholder="Utilidad %" value={form.utilidad} onChange={handleChange} />
+              <input name="precio" type="number" step="0.01" placeholder="Precio" value={form.precio} onChange={handleChange} />
+              <input name="existencia" type="number" placeholder="Existencia" value={form.existencia} onChange={handleChange} />
+              <input name="stock_minimo" type="number" placeholder="Stock mínimo" value={form.stock_minimo} onChange={handleChange} />
+              <input name="stock_maximo" type="number" placeholder="Stock máximo" value={form.stock_maximo} onChange={handleChange} />
+              <div className="modal-actions" style={{ gridColumn: '1 / -1' }}>
+                <button type="button" className="btn-secondary" onClick={() => setEditingProducto(null)}>Cancelar</button>
+                <button type="submit" className="btn-hero" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar'}</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

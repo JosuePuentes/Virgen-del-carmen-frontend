@@ -34,8 +34,10 @@ Este documento describe la API del backend (FastAPI en Render) para conectar el 
 ## 4. Inventario / Catálogo
 
 - **GET** `/inventario/` — Listar inventario
-- **GET** `/inventario_maestro/` — Inventario maestro
+- **GET** `/inventario_maestro/` — Inventario maestro (array o `{ items/data/productos/results }`)
 - **GET** `/inventario_maestro/{id}` — Producto por ID
+- **POST** `/inventario_maestro/` — Crear producto (token admin)
+- **PUT** `/inventario_maestro/{id}` — Actualizar producto (token admin)
 
 ---
 

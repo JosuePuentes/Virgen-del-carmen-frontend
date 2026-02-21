@@ -20,7 +20,9 @@ El frontend **Virgen del Carmen** (Vite + React) está conectado a tu backend Fa
    - `POST /register/` — Registro cliente
    - `POST /contacto` — Formulario de contacto
    - `POST /api/chat` — Chatbot
-   - `GET /inventario_maestro/` — Catálogo de productos
+   - `GET /inventario_maestro/` — Catálogo de productos (debe devolver array o `{ items/data/productos/results }`)
+   - `POST /inventario_maestro/` — Crear producto (JSON o FormData con foto)
+   - `PUT /inventario_maestro/{id}` — Actualizar producto
    - `GET /pedidos/por_cliente/{rif}` — Pedidos del cliente
    - `POST /reclamos/cliente` — Crear reclamo
    - `GET /reclamos/cliente/{rif}` — Listar reclamos del cliente
