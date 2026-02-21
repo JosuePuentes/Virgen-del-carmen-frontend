@@ -282,7 +282,8 @@ export default function AdminInformes() {
     const headers = columnasVisibles.map((k) => mapKeyToLabel[k] || k)
 
     let total = 0
-    const isMoneda = (k) => ['monto', 'total', 'precio', 'costo', 'utilidad', 'limite_credito', 'valor_vendido', 'cuentas_cobrar', 'cuentas_pagar', 'gastos'].includes(k)
+    const isMoneda = (k) => ['monto', 'total', 'precio', 'costo', 'limite_credito', 'valor_vendido', 'cuentas_cobrar', 'cuentas_pagar', 'gastos'].includes(k)
+    const isPorcentaje = (k) => tipo === 'inventario' && k === 'utilidad'
 
     return (
       <div id="informe-preview" className="informe-preview-wrap">
@@ -303,7 +304,9 @@ export default function AdminInformes() {
                   const keyMap = { numero_factura: 'numero', fecha: 'fecha_pago', fecha_emision: 'fecha_pago', proveedor: 'proveedor_empresa', id: '_id', contacto: 'contacto_nombre' }
                   const rawKey = keyMap[col] || col
                   let val = row[rawKey] ?? row[col]
-                  if (isMoneda(col) && typeof val === 'number') {
+                  if (isPorcentaje(col) && (typeof val === 'number' || val != null)) {
+                    val = `${Number(val)}%`
+                  } else if (isMoneda(col) && typeof val === 'number') {
                     total += val
                     val = formatPrecio(val, bcv)
                   } else if (val == null) val = '—'

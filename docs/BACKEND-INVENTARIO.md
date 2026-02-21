@@ -118,6 +118,17 @@ Formatos aceptados por el frontend:
 
 ---
 
+## Fórmula de utilidad (precio desde costo)
+
+La utilidad es **comercial/contable**: margen sobre el precio de venta, no sobre el costo.
+
+- Utilidad = (precio - costo) / precio
+- Por tanto: **precio = costo / (1 - utilidad/100)**
+
+Ejemplo: costo $1, utilidad 30% → precio = 1 / 0.70 = $1.43 (no 1 + 30% = $1.30).
+
+---
+
 ## Resumen para la IA del backend
 
 1. Implementar `GET /inventario_maestro/` que devuelva un **array** o `{ items/data/productos/results: [...] }`.

@@ -49,6 +49,11 @@ El header del panel muestra:
 - **condiciones_comerciales** — Texto libre (ej: "30 días de crédito")
 - **dias_credito** — Si no hay condiciones_comerciales, se muestra "X días de crédito"
 
+**Para el catálogo cliente (precio con descuento):**
+
+- **descuento_comercial** — Porcentaje (0-100) que se resta al precio. Precio mostrado = precio × (1 - descuento_comercial/100)
+- **descuento_pronto_pago** — Porcentaje adicional por pronto pago (para futuras facturaciones)
+
 ---
 
 ## Autenticación

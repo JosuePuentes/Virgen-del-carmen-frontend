@@ -12,6 +12,7 @@ export default function AdminClientes() {
     rif: '', empresa: '', encargado: '', direccion: '', telefono: '',
     email: '', password: '',
     dias_credito: 0, limite_credito: 0,
+    descuento_comercial: 0, descuento_pronto_pago: 0,
   })
 
   async function cargar() {
@@ -51,9 +52,11 @@ export default function AdminClientes() {
         password: form.password || undefined,
         dias_credito: form.dias_credito || 0,
         limite_credito: form.limite_credito || 0,
+        descuento_comercial: form.descuento_comercial ?? 0,
+        descuento_pronto_pago: form.descuento_pronto_pago ?? 0,
       }, getAdminToken())
       setExito('Cliente creado. El cliente puede iniciar sesión con el correo y contraseña indicados.')
-      setForm({ rif: '', empresa: '', encargado: '', direccion: '', telefono: '', email: '', password: '', dias_credito: 0, limite_credito: 0 })
+      setForm({ rif: '', empresa: '', encargado: '', direccion: '', telefono: '', email: '', password: '', dias_credito: 0, limite_credito: 0, descuento_comercial: 0, descuento_pronto_pago: 0 })
       await cargar()
     } catch (err) {
       setError(err.message || 'Error al crear cliente')
@@ -81,6 +84,8 @@ export default function AdminClientes() {
           <input name="direccion" placeholder="Dirección" value={form.direccion} onChange={handleChange} />
           <input name="dias_credito" type="number" placeholder="Días de crédito" value={form.dias_credito || ''} onChange={handleChange} />
           <input name="limite_credito" type="number" step="0.01" placeholder="Límite de crédito ($)" value={form.limite_credito || ''} onChange={handleChange} />
+          <input name="descuento_comercial" type="number" step="0.01" placeholder="Descuento comercial %" value={form.descuento_comercial ?? ''} onChange={handleChange} title="Porcentaje que se resta al precio para este cliente" />
+          <input name="descuento_pronto_pago" type="number" step="0.01" placeholder="Descuento pronto pago %" value={form.descuento_pronto_pago ?? ''} onChange={handleChange} />
           <button type="submit" className="btn-hero" disabled={creando}>
             {creando ? 'Creando…' : 'Crear cliente'}
           </button>
@@ -104,6 +109,8 @@ export default function AdminClientes() {
                   <th>Teléfono</th>
                   <th>Días crédito</th>
                   <th>Límite crédito</th>
+                  <th>Desc. comercial</th>
+                  <th>Desc. pronto pago</th>
                 </tr>
               </thead>
               <tbody>
@@ -116,6 +123,8 @@ export default function AdminClientes() {
                     <td>{c.telefono || '—'}</td>
                     <td>{c.dias_credito ?? '—'}</td>
                     <td><Precio value={c.limite_credito} /></td>
+                    <td>{c.descuento_comercial != null ? `${c.descuento_comercial}%` : '—'}</td>
+                    <td>{c.descuento_pronto_pago != null ? `${c.descuento_pronto_pago}%` : '—'}</td>
                   </tr>
                 ))}
               </tbody>

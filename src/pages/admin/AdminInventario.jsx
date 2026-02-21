@@ -45,8 +45,8 @@ export default function AdminInventario() {
       if ((name === 'costo' || name === 'utilidad') && (next.costo || next.utilidad)) {
         const costo = parseFloat(next.costo) || 0
         const utilidad = parseFloat(next.utilidad) || 0
-        if (costo > 0 && utilidad >= 0) {
-          next.precio = (costo * (1 + utilidad / 100)).toFixed(2)
+        if (costo > 0 && utilidad >= 0 && utilidad < 100) {
+          next.precio = (costo / (1 - utilidad / 100)).toFixed(2)
         }
       }
       return next

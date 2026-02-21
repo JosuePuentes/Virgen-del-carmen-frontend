@@ -6,7 +6,7 @@
  */
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://droclven-back.onrender.com'
 
-function getApiUrl(path) {
+export function getApiUrl(path) {
   const p = path.startsWith('/') ? path : '/' + path
   return API_BASE_URL + p
 }
