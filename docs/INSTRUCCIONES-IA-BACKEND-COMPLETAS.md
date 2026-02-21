@@ -131,6 +131,12 @@ Cada respuesta debe incluir: `_id`, `cliente`, `rif`, `total`, `estado`, y datos
 ## 12. Clientes (admin)
 
 - `GET /clientes/all` – todos los clientes
+
+---
+
+## Módulo Informes
+
+El frontend tiene un módulo de informes que genera reportes (ventas, inventario, cuentas por cobrar/pagar, clientes, gastos, proveedores, compras, picking, packing, solicitudes, finanzas). Usa los endpoints existentes listados arriba. Ver `docs/BACKEND-INFORMES.md` para detalle.
 - `POST /clientes/` – crear con: rif, empresa, encargado, email, password, telefono, direccion, dias_credito, limite_credito. El email y password son el usuario para acceso del cliente (si no se envían, el backend puede generarlos).
 - `PATCH /clientes/{rif}` – editar
 - `GET /clientes/{rif}` – detalle con limite_credito, limite_consumido, facturas_vencidas

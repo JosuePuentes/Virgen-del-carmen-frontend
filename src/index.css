@@ -1712,3 +1712,114 @@ ul {
     grid-template-columns: 1fr;
   }
 }
+
+/* Informes */
+.admin-informes .informe-selector {
+  margin-bottom: 1.5rem;
+}
+
+.informe-search {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.informe-tipos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.informe-tipo-btn {
+  padding: 0.75rem 1rem;
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.informe-tipo-btn:hover {
+  border-color: var(--ocre);
+  background: var(--off-white);
+}
+
+.modal-informes {
+  max-width: 520px;
+}
+
+.informe-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.informe-filtro-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.informe-filtro-item input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.informe-filtro-item input[type="date"] {
+  padding: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.informe-preview-section {
+  margin-top: 1.5rem;
+}
+
+.informe-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.informe-preview-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  overflow-x: auto;
+}
+
+.informe-preview-wrap h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.informe-fecha {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 1rem;
+}
+
+.informe-tabla {
+  margin: 0;
+}
+
+.informe-total {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+@media print {
+  .admin-sidebar, .admin-informes .informe-acciones, .informe-selector, .admin-welcome, .admin-informes h1 { display: none !important; }
+  .informe-preview-wrap { border: none; padding: 0; }
+}

@@ -27,6 +27,7 @@ const ITEMS_MENU = [
   { to: '/admin/inventario', label: 'Inventario', modulo: 'inventario' },
   { to: '/admin/clientes', label: 'Clientes', modulo: 'clientes' },
   { to: '/admin/usuarios', label: 'Usuarios', modulo: 'usuarios' },
+  { to: '/admin/informes', label: 'Informes', modulo: null },
 ]
 
 export default function AdminLayout() {
