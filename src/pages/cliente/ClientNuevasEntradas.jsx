@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { apiGet } from '../../config/api'
+import { apiGet, getToken } from '../../config/api'
 import { Precio } from '../../components/Precio'
 
 export default function ClientNuevasEntradas() {
@@ -10,8 +10,8 @@ export default function ClientNuevasEntradas() {
     async function cargar() {
       setLoading(true)
       try {
-        const data = await apiGet('inventario_maestro/')
-        const lista = Array.isArray(data) ? data : data?.items || data?.productos || data?.data || []
+        const data = await apiGet('catalogo/', getToken())
+        const lista = data?.productos || []
         setProductos(lista.slice(0, 20))
       } catch { setProductos([]) }
       finally { setLoading(false) }

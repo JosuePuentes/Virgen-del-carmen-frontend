@@ -1436,6 +1436,40 @@ ul {
   color: var(--text-muted);
 }
 
+.client-producto-existencia.disponible {
+  color: var(--success);
+}
+
+.client-producto-existencia.agotado {
+  color: var(--error);
+}
+
+.client-producto-precios {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.client-producto-precio-base.tachado {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.client-producto-descuento {
+  background: var(--success-bg);
+  color: var(--success);
+  font-size: 0.85rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.client-producto-precio.destacado {
+  color: var(--success);
+}
+
 .client-producto-precio-grande {
   font-size: 1.25rem !important;
   margin-top: 0.5rem !important;
