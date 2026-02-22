@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom'
 import { getToken, getRif, setToken, setRif, apiGet } from '../../config/api'
+import { CartProvider, useCart } from '../../context/CartContext'
 
 const ITEMS_MENU = [
   { to: '/cliente', label: 'Inicio', icon: '🏠' },
@@ -60,6 +61,23 @@ export default function ClientLayout() {
     : 'Consulte condiciones'
 
   return (
+    <CartProvider>
+      <ClientLayoutInner
+        empresa={empresa}
+        condiciones={condiciones}
+        loadingCliente={loadingCliente}
+        handleLogout={handleLogout}
+        isActive={isActive}
+      />
+    </CartProvider>
+  )
+}
+
+function ClientLayoutInner({ empresa, condiciones, loadingCliente, handleLogout, isActive }) {
+  const { carrito } = useCart()
+  const totalItems = carrito.reduce((s, i) => s + i.cantidad, 0)
+
+  return (
     <div className="client-layout">
       <aside className="client-sidebar">
         <div className="client-sidebar-header">
@@ -75,6 +93,9 @@ export default function ClientLayout() {
             >
               <span className="client-nav-icon">{item.icon}</span>
               {item.label}
+              {item.to === '/cliente/carrito' && totalItems > 0 && (
+                <span className="client-nav-badge">{totalItems}</span>
+              )}
             </Link>
           ))}
         </nav>
