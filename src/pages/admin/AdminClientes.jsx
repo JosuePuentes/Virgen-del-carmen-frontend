@@ -192,19 +192,29 @@ export default function AdminClientes() {
         <div className="modal-overlay" onClick={() => setEditingCliente(null)}>
           <div className="modal-content modal-inventario-edit" onClick={(e) => e.stopPropagation()}>
             <h3>Editar cliente: {editingCliente.empresa || editingCliente.rif}</h3>
-            <form onSubmit={handleEditar} className="admin-form admin-form-grid">
+            <form onSubmit={handleEditar} className="admin-form admin-form-labels">
               <label>RIF</label>
               <input value={form.rif} readOnly disabled style={{ background: 'var(--off-white)', cursor: 'not-allowed' }} />
-              <input name="empresa" placeholder="Empresa" value={form.empresa} onChange={handleChange} required />
-              <input name="encargado" placeholder="Encargado" value={form.encargado} onChange={handleChange} />
-              <input name="email" type="email" placeholder="Correo (usuario)" value={form.email} onChange={handleChange} required />
-              <input name="password" type="password" placeholder="Nueva contraseña (dejar vacío para no cambiar)" value={form.password} onChange={handleChange} autoComplete="new-password" />
-              <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
-              <input name="direccion" placeholder="Dirección" value={form.direccion} onChange={handleChange} />
-              <input name="dias_credito" type="number" placeholder="Días de crédito" value={form.dias_credito ?? ''} onChange={handleChange} />
-              <input name="limite_credito" type="number" step="0.01" placeholder="Límite de crédito ($)" value={form.limite_credito ?? ''} onChange={handleChange} />
-              <input name="descuento_comercial" type="number" step="0.01" placeholder="Descuento comercial %" value={form.descuento_comercial ?? ''} onChange={handleChange} />
-              <input name="descuento_pronto_pago" type="number" step="0.01" placeholder="Descuento pronto pago %" value={form.descuento_pronto_pago ?? ''} onChange={handleChange} />
+              <label>Empresa</label>
+              <input name="empresa" value={form.empresa} onChange={handleChange} required />
+              <label>Encargado</label>
+              <input name="encargado" value={form.encargado} onChange={handleChange} />
+              <label>Correo (usuario)</label>
+              <input name="email" type="email" value={form.email} onChange={handleChange} required />
+              <label>Nueva contraseña (dejar vacío para no cambiar)</label>
+              <input name="password" type="password" value={form.password} onChange={handleChange} autoComplete="new-password" />
+              <label>Teléfono</label>
+              <input name="telefono" value={form.telefono} onChange={handleChange} />
+              <label>Dirección</label>
+              <input name="direccion" value={form.direccion} onChange={handleChange} />
+              <label>Días de crédito</label>
+              <input name="dias_credito" type="number" value={form.dias_credito ?? ''} onChange={handleChange} />
+              <label>Límite de crédito ($)</label>
+              <input name="limite_credito" type="number" step="0.01" value={form.limite_credito ?? ''} onChange={handleChange} />
+              <label>Descuento comercial %</label>
+              <input name="descuento_comercial" type="number" step="0.01" value={form.descuento_comercial ?? ''} onChange={handleChange} />
+              <label>Descuento pronto pago %</label>
+              <input name="descuento_pronto_pago" type="number" step="0.01" value={form.descuento_pronto_pago ?? ''} onChange={handleChange} />
               <div className="modal-actions" style={{ gridColumn: '1 / -1' }}>
                 <button type="button" className="btn-secondary" onClick={() => setEditingCliente(null)}>Cancelar</button>
                 <button type="submit" className="btn-hero" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar'}</button>

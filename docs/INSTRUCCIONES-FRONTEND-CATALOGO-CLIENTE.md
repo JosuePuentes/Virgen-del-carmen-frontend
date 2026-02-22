@@ -2,14 +2,15 @@
 
 ## Endpoint
 
-En el área cliente (catálogo para el cliente logueado):
+En el área cliente (catálogo para el cliente logueado) **y en el catálogo público** (ruta `/catalogo`):
 
-- **No usar:** `GET /inventario_maestro/` (pide token admin → 401 con token de cliente)
+- **No usar:** `GET /inventario_maestro/` (pide token admin → 401 sin token o con token de cliente)
 - **Usar:** `GET /catalogo/`
 
 Ejemplo: `GET https://droclven-back.onrender.com/catalogo/`
 
-Con o sin `Authorization: Bearer <token_cliente>`.
+- **Catálogo público:** Sin header `Authorization`
+- **Área cliente:** Con o sin `Authorization: Bearer <token_cliente>`
 
 ---
 
@@ -55,6 +56,6 @@ No mostrar costo ni utilidad (no vienen en este endpoint).
 
 ## Texto para la IA del frontend
 
-> Catálogo en área cliente: Llamar a GET /catalogo/ (no a /inventario_maestro/). La respuesta es { "productos": [ ... ] }. Por producto: id, codigo, descripcion, marca, foto/foto_url, precio, descuento (%), precio_con_descuento, existencia. En la UI mostrar: foto (o placeholder si no hay), código, descripción, marca, precio, descuento y precio con descuento, y existencia. No mostrar costo.
+> Catálogo público y área cliente: Llamar a GET /catalogo/ (no a /inventario_maestro/). Catálogo público: sin Authorization. Área cliente: con o sin token. La respuesta es { "productos": [ ... ] }. Por producto: id, codigo, descripcion, marca, foto/foto_url, precio, descuento (%), precio_con_descuento, existencia. En la UI mostrar: foto (o placeholder si no hay), código, descripción, marca, precio, descuento y precio con descuento, y existencia. No mostrar costo.
 >
 > El detalle completo está en `docs/INSTRUCCIONES-FRONTEND-CATALOGO-CLIENTE.md`.

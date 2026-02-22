@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { apiGet } from '../config/api'
+import { apiGetPublic } from '../config/api'
 import Header from '../components/Header'
 import { Precio } from '../components/Precio'
 import Nav from '../components/Nav'
@@ -16,8 +16,8 @@ export default function CatalogoPage() {
       setLoading(true)
       setError('')
       try {
-        const data = await apiGet('inventario_maestro/')
-        setProductos(Array.isArray(data) ? data : data?.items || data?.productos || [])
+        const data = await apiGetPublic('catalogo/')
+        setProductos(data?.productos || [])
       } catch (err) {
         setError(err.message || 'No se pudo cargar el catálogo')
         setProductos([])
@@ -29,7 +29,7 @@ export default function CatalogoPage() {
   }, [])
 
   const filtrados = productos.filter((p) => {
-    const texto = [p.codigo, p.descripcion, p.nombre, p.laboratorio].filter(Boolean).join(' ').toLowerCase()
+    const texto = [p.codigo, p.descripcion, p.nombre, p.marca].filter(Boolean).join(' ').toLowerCase()
     return texto.includes(busqueda.toLowerCase())
   })
 
@@ -58,18 +58,26 @@ export default function CatalogoPage() {
               {filtrados.length === 0 ? (
                 <p className="catalogo-empty">No hay productos para mostrar.</p>
               ) : (
-                filtrados.map((p) => (
-                  <article key={p._id || p.codigo || p.id} className="producto-card">
-                    <div className="producto-info">
-                      <span className="producto-codigo">{p.codigo || p._id}</span>
-                      <h3 className="producto-nombre">{p.descripcion || p.nombre || 'Sin nombre'}</h3>
-                      {p.laboratorio && <span className="producto-lab">{p.laboratorio}</span>}
-                      <p className="producto-precio">
-                        <Precio value={p.precio} />
-                      </p>
-                    </div>
-                  </article>
-                ))
+                filtrados.map((p) => {
+                  const tieneDescuento = (p.descuento || 0) > 0
+                  const precioFinal = p.precio_con_descuento ?? p.precio
+                  return (
+                    <article key={p._id || p.codigo || p.id} className="producto-card">
+                      <div className="producto-info">
+                        <span className="producto-codigo">{p.codigo || p._id}</span>
+                        <h3 className="producto-nombre">{p.descripcion || p.nombre || 'Sin nombre'}</h3>
+                        {p.marca && <span className="producto-lab">{p.marca}</span>}
+                        <p className="producto-precio">
+                          {tieneDescuento ? (
+                            <><span className="tachado"><Precio value={p.precio} /></span> <Precio value={precioFinal} /> ({p.descuento}% off)</>
+                          ) : (
+                            <Precio value={precioFinal} />
+                          )}
+                        </p>
+                      </div>
+                    </article>
+                  )
+                })
               )}
             </div>
           )}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { apiGet, apiPost, apiPostForm, apiPut, getAdminToken } from '../../config/api'
+import { apiGet, apiPost, apiPostForm, apiPut, apiPutForm, getAdminToken } from '../../config/api'
 import { Precio } from '../../components/Precio'
 
 function toArray(data) {
@@ -293,16 +293,30 @@ export default function AdminInventario() {
         <div className="modal-overlay" onClick={() => setEditingProducto(null)}>
           <div className="modal-content modal-inventario-edit" onClick={(e) => e.stopPropagation()}>
             <h3>Editar producto: {editingProducto.codigo || editingProducto._id}</h3>
-            <form onSubmit={handleEditar} className="admin-form admin-form-grid">
-              <input name="codigo" placeholder="Código" value={form.codigo} onChange={handleChange} required />
-              <input name="descripcion" placeholder="Descripción" value={form.descripcion} onChange={handleChange} required />
-              <input name="marca" placeholder="Marca" value={form.marca} onChange={handleChange} />
-              <input name="costo" type="number" step="0.01" placeholder="Costo ($)" value={form.costo} onChange={handleChange} />
-              <input name="utilidad" type="number" step="0.01" placeholder="Utilidad %" value={form.utilidad} onChange={handleChange} />
-              <input name="precio" type="number" step="0.01" placeholder="Precio" value={form.precio} onChange={handleChange} />
-              <input name="existencia" type="number" placeholder="Existencia" value={form.existencia} onChange={handleChange} />
-              <input name="stock_minimo" type="number" placeholder="Stock mínimo" value={form.stock_minimo} onChange={handleChange} />
-              <input name="stock_maximo" type="number" placeholder="Stock máximo" value={form.stock_maximo} onChange={handleChange} />
+            <form onSubmit={handleEditar} className="admin-form admin-form-labels">
+              <label>Código</label>
+              <input name="codigo" value={form.codigo} onChange={handleChange} required />
+              <label>Descripción</label>
+              <input name="descripcion" value={form.descripcion} onChange={handleChange} required />
+              <label>Marca</label>
+              <input name="marca" value={form.marca} onChange={handleChange} />
+              <label>Costo ($)</label>
+              <input name="costo" type="number" step="0.01" value={form.costo} onChange={handleChange} />
+              <label>Utilidad %</label>
+              <input name="utilidad" type="number" step="0.01" value={form.utilidad} onChange={handleChange} />
+              <label>Precio</label>
+              <input name="precio" type="number" step="0.01" value={form.precio} onChange={handleChange} />
+              <label>Existencia</label>
+              <input name="existencia" type="number" value={form.existencia} onChange={handleChange} />
+              <label>Stock mínimo</label>
+              <input name="stock_minimo" type="number" value={form.stock_minimo} onChange={handleChange} />
+              <label>Stock máximo</label>
+              <input name="stock_maximo" type="number" value={form.stock_maximo} onChange={handleChange} />
+              <label>Nueva foto (opcional)</label>
+              <div>
+                <input type="file" accept="image/*" onChange={(e) => setFoto(e.target.files?.[0] || null)} />
+                {foto && <span className="admin-form-file-name">{foto.name}</span>}
+              </div>
               <div className="modal-actions" style={{ gridColumn: '1 / -1' }}>
                 <button type="button" className="btn-secondary" onClick={() => setEditingProducto(null)}>Cancelar</button>
                 <button type="submit" className="btn-hero" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar'}</button>

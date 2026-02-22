@@ -1452,6 +1452,7 @@ ul {
   margin-top: 0.5rem;
 }
 
+.tachado { text-decoration: line-through; color: var(--text-muted); }
 .client-producto-precio-base.tachado {
   text-decoration: line-through;
   color: var(--text-muted);
@@ -2117,6 +2118,29 @@ ul {
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 0.75rem;
   align-items: end;
+}
+
+.admin-form-labels {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  max-width: 520px;
+}
+
+.admin-form-labels label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.admin-form-labels input[type="file"] {
+  padding: 0.25rem 0;
+}
+
+.admin-form-file-name {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: 0.5rem;
 }
 
 .finanzas-cards { margin-bottom: 1.5rem; }

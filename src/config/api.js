@@ -113,6 +113,14 @@ export async function apiGet(path, token = null) {
   return res.json().catch(() => ({}))
 }
 
+/** GET sin Authorization (catálogo público, etc.) */
+export async function apiGetPublic(path) {
+  const url = getApiUrl(path)
+  const res = await fetch(url, { method: 'GET', headers: getHeaders(null) })
+  if (!res.ok) throw new Error(await res.text().catch(() => res.statusText))
+  return res.json().catch(() => ({}))
+}
+
 export async function apiPost(path, body, token = null) {
   const url = getApiUrl(path)
   const res = await fetch(url, {
@@ -211,6 +219,20 @@ export async function apiPostForm(path, formData, token = null) {
   if (token ?? getToken()) headers['Authorization'] = `Bearer ${token ?? getToken()}`
   const res = await fetch(url, {
     method: 'POST',
+    headers,
+    body: formData,
+  })
+  if (!res.ok) throw new Error(await res.text().catch(() => res.statusText))
+  return res.json().catch(() => ({}))
+}
+
+/** PUT con FormData (archivos). Para actualizar producto con nueva foto. */
+export async function apiPutForm(path, formData, token = null) {
+  const url = getApiUrl(path)
+  const headers = {}
+  if (token ?? getToken()) headers['Authorization'] = `Bearer ${token ?? getToken()}`
+  const res = await fetch(url, {
+    method: 'PUT',
     headers,
     body: formData,
   })
