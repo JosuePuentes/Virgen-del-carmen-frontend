@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { apiGet, apiPost, getAdminToken } from '../../config/api'
+import { apiGet, apiPost, apiPatch, getAdminToken } from '../../config/api'
 import { Precio } from '../../components/Precio'
 
 export default function AdminClientes() {
@@ -7,6 +7,8 @@ export default function AdminClientes() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [creando, setCreando] = useState(false)
+  const [guardando, setGuardando] = useState(false)
+  const [editingCliente, setEditingCliente] = useState(null)
   const [exito, setExito] = useState('')
   const [form, setForm] = useState({
     rif: '', empresa: '', encargado: '', direccion: '', telefono: '',
@@ -65,6 +67,55 @@ export default function AdminClientes() {
     }
   }
 
+  function abrirEditar(c) {
+    setEditingCliente(c)
+    setForm({
+      rif: c.rif || '',
+      empresa: c.empresa || '',
+      encargado: c.encargado || '',
+      direccion: c.direccion || '',
+      telefono: c.telefono || '',
+      email: c.email || '',
+      password: '',
+      dias_credito: c.dias_credito ?? 0,
+      limite_credito: c.limite_credito ?? 0,
+      descuento_comercial: c.descuento_comercial ?? 0,
+      descuento_pronto_pago: c.descuento_pronto_pago ?? 0,
+    })
+  }
+
+  async function handleEditar(e) {
+    e?.preventDefault()
+    if (!editingCliente) return
+    const rif = editingCliente.rif
+    setError('')
+    setExito('')
+    setGuardando(true)
+    try {
+      const body = {
+        empresa: form.empresa,
+        encargado: form.encargado || undefined,
+        direccion: form.direccion || undefined,
+        telefono: form.telefono || undefined,
+        email: form.email?.trim() || undefined,
+        dias_credito: form.dias_credito ?? 0,
+        limite_credito: form.limite_credito ?? 0,
+        descuento_comercial: form.descuento_comercial ?? 0,
+        descuento_pronto_pago: form.descuento_pronto_pago ?? 0,
+      }
+      if (form.password) body.password = form.password
+      await apiPatch(`clientes/${rif}`, body, getAdminToken())
+      setExito('Cliente actualizado.')
+      setEditingCliente(null)
+      setForm({ rif: '', empresa: '', encargado: '', direccion: '', telefono: '', email: '', password: '', dias_credito: 0, limite_credito: 0, descuento_comercial: 0, descuento_pronto_pago: 0 })
+      await cargar()
+    } catch (err) {
+      setError(err.message || 'Error al actualizar')
+    } finally {
+      setGuardando(false)
+    }
+  }
+
   return (
     <div className="admin-page">
       <h1>Clientes</h1>
@@ -111,6 +162,7 @@ export default function AdminClientes() {
                   <th>Límite crédito</th>
                   <th>Desc. comercial</th>
                   <th>Desc. pronto pago</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -125,11 +177,40 @@ export default function AdminClientes() {
                     <td><Precio value={c.limite_credito} /></td>
                     <td>{c.descuento_comercial != null ? `${c.descuento_comercial}%` : '—'}</td>
                     <td>{c.descuento_pronto_pago != null ? `${c.descuento_pronto_pago}%` : '—'}</td>
+                    <td>
+                      <button type="button" className="btn-aprobar btn-sm" onClick={() => abrirEditar(c)}>Editar</button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           )}
+        </div>
+      )}
+
+      {editingCliente && (
+        <div className="modal-overlay" onClick={() => setEditingCliente(null)}>
+          <div className="modal-content modal-inventario-edit" onClick={(e) => e.stopPropagation()}>
+            <h3>Editar cliente: {editingCliente.empresa || editingCliente.rif}</h3>
+            <form onSubmit={handleEditar} className="admin-form admin-form-grid">
+              <label>RIF</label>
+              <input value={form.rif} readOnly disabled style={{ background: 'var(--off-white)', cursor: 'not-allowed' }} />
+              <input name="empresa" placeholder="Empresa" value={form.empresa} onChange={handleChange} required />
+              <input name="encargado" placeholder="Encargado" value={form.encargado} onChange={handleChange} />
+              <input name="email" type="email" placeholder="Correo (usuario)" value={form.email} onChange={handleChange} required />
+              <input name="password" type="password" placeholder="Nueva contraseña (dejar vacío para no cambiar)" value={form.password} onChange={handleChange} autoComplete="new-password" />
+              <input name="telefono" placeholder="Teléfono" value={form.telefono} onChange={handleChange} />
+              <input name="direccion" placeholder="Dirección" value={form.direccion} onChange={handleChange} />
+              <input name="dias_credito" type="number" placeholder="Días de crédito" value={form.dias_credito ?? ''} onChange={handleChange} />
+              <input name="limite_credito" type="number" step="0.01" placeholder="Límite de crédito ($)" value={form.limite_credito ?? ''} onChange={handleChange} />
+              <input name="descuento_comercial" type="number" step="0.01" placeholder="Descuento comercial %" value={form.descuento_comercial ?? ''} onChange={handleChange} />
+              <input name="descuento_pronto_pago" type="number" step="0.01" placeholder="Descuento pronto pago %" value={form.descuento_pronto_pago ?? ''} onChange={handleChange} />
+              <div className="modal-actions" style={{ gridColumn: '1 / -1' }}>
+                <button type="button" className="btn-secondary" onClick={() => setEditingCliente(null)}>Cancelar</button>
+                <button type="submit" className="btn-hero" disabled={guardando}>{guardando ? 'Guardando…' : 'Guardar'}</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

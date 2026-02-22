@@ -41,10 +41,10 @@ Este documento describe la API del backend (FastAPI en Render) para conectar el 
 
 ---
 
-## 5. Clientes (área cliente: Mi cuenta)
+## 5. Clientes
 
-- **GET** `/clientes/{rif}` — Obtener datos del cliente (token cliente, usar su propio rif)
-- **PATCH** `/clientes/{rif}` — Actualizar datos del cliente (body parcial: encargado, direccion, telefono, email, password)
+- **GET** `/clientes/{rif}` — Obtener datos del cliente (token cliente o admin)
+- **PATCH** `/clientes/{rif}` — Actualizar cliente. Admin: todos los campos (empresa, encargado, direccion, telefono, email, password, dias_credito, limite_credito, descuento_comercial, descuento_pronto_pago). Cliente: solo sus propios datos (body parcial)
 
 ---
 
