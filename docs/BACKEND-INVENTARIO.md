@@ -96,9 +96,11 @@ Formatos aceptados por el frontend:
 
 ## 3. PUT /inventario_maestro/{id} — Actualizar producto
 
-**Content-Type:** `application/json`
+**Content-Type:** `application/json` (sin foto) o `multipart/form-data` (con foto nueva).
 
-**Body:** Mismos campos que POST (todos opcionales excepto los que se quieran actualizar):
+**Body JSON:** Mismos campos que POST (todos opcionales excepto los que se quieran actualizar).
+
+**Body FormData:** Los mismos campos como strings/numbers + archivo en campo `foto` para actualizar la imagen.
 
 ```json
 {
